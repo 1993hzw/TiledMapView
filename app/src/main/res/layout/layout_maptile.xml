@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <cn.forward.tiledmapview.TiledMapView
+        android:id="@+id/mapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <cn.forward.androids.views.StringScrollPicker
+        android:id="@+id/picker"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="10dp"
+        app:spv_is_circulation="false"
+        app:spv_max_text_size="21dp"
+        app:spv_min_text_size="13dp"
+        app:spv_orientation="vertical"
+        app:spv_start_color="#0ff"
+        app:spv_visible_item_count="3" />
+
+    <cn.forward.androids.views.SFrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|bottom"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="80dp"
+        android:background="#FFF"
+        android:onClick="location"
+        app:sel_background_corners="5dp"
+        app:sel_background_pressed="#aaa">
+
+        <cn.forward.androids.views.MaskImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="5dp"
+            android:src="@mipmap/ic_location_btn" />
+    </cn.forward.androids.views.SFrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:background="#eeeeeeee"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <RadioGroup
+            android:id="@+id/img_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/satellite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/satellite_map"
+                android:textColor="#000"
+                android:textSize="13dp" />
+
+            <RadioButton
+                android:id="@+id/vector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vector_map"
+                android:textColor="#000"
+                android:textSize="13dp" />
+
+            <RadioButton
+                android:id="@+id/terrain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/terrain_map"
+                android:textColor="#000"
+                android:textSize="13dp" />
+
+
+        </RadioGroup>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:background="#888" />
+
+        <CheckBox
+            android:id="@+id/marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/marker"
+            android:textColor="#000"
+            android:textSize="13dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="65dp"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/tiles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="80dp"
+            android:text="Tiles"
+            android:textColor="#fff"
+            android:textSize="13dp" />
+
+        <CheckBox
+            android:id="@+id/debug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minWidth="80dp"
+            android:padding="5dp"
+            android:text="Debug"
+            android:textColor="#fff"
+            android:textSize="13dp" />
+
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MapTileLoader</string>
+
+    <string name="satellite_map">Satellite</string>
+    <string name="vector_map">Vector</string>
+    <string name="terrain_map">Terrain</string>
+    <string name="marker">Marker</string>
+
+    <string name="here">You are here!</string>
+    <string name="lng_lat_projection">Longitude latitude projection </string>
+    <string name="web_mercator_projection">Web Mercator projection</string>
+</resources>

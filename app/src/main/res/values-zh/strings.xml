@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MapTileLoader</string>
+    
+    <string name="satellite_map">卫星图</string>
+    <string name="vector_map">矢量图</string>
+    <string name="terrain_map">地形图</string>
+    <string name="marker">标记</string>
+
+    <string name="here">你在这!</string>
+    <string name="lng_lat_projection">经纬度等间投影</string>
+    <string name="web_mercator_projection">Web墨卡托投影</string>
+</resources>
