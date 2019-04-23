@@ -55,13 +55,9 @@ ITileLayer googleTileLayer = new GoogleTileLayer(mMapView, GoogleOnlineTileImage
 mapView.getLayerGroup().add(googleTileLayer);
 ```
 
-Currently, Tiled MapView directly supports loading Google maps （[GoogleTileLayer] ()）, Tianditu maps（[TiandituTileLayer]()）, and the custom tiled maps.
+Currently, Tiled MapView directly supports loading Google maps （[GoogleTileLayer](https://github.com/1993hzw/TiledMapView/blob/master/library/src/main/java/cn/forward/tiledmapview/layer/google/GoogleTileLayer.java)）, Tianditu maps（[TiandituTileLayer](https://github.com/1993hzw/TiledMapView/blob/master/library/src/main/java/cn/forward/tiledmapview/layer/tianditu/TiandituTileLayer.java)）, and the custom tiled maps.
 
-***目前，TiledMapView直接支持加载谷歌地图（[GoogleTileLayer]()），天地图（[TiandituTileLayer]()），以及自定义瓦片地图。***
-
-There is [a sample of LOL game map]() which shows how to load the custom tiled map.
-
-***这里有一个加载[LOL游戏地图的示例]（），显示了如何加载自定义瓦片地图***
+***目前，TiledMapView直接支持加载谷歌地图（[GoogleTileLayer](https://github.com/1993hzw/TiledMapView/blob/master/library/src/main/java/cn/forward/tiledmapview/layer/google/GoogleTileLayer.java)），天地图（[TiandituTileLayer](https://github.com/1993hzw/TiledMapView/blob/master/library/src/main/java/cn/forward/tiledmapview/layer/tianditu/TiandituTileLayer.java)），以及自定义瓦片地图。***
 
 Also, you can add some overlays:
 
@@ -76,11 +72,15 @@ textPixelOverlay.setLocationOnMap(0,-300);
 mapView.getLayerGroup().add(textPixelOverlay);
 ```
 
-You can use [BitmapPixelOverlay]()/[BitmapMapOverlay](), if you want add a bitmap overlay.
+You can use [BitmapPixelOverlay](https://github.com/1993hzw/TiledMapView/blob/master/library/src/main/java/cn/forward/tiledmapview/overlay/BitmapPixelOverlay.java)/[BitmapMapOverlay](https://github.com/1993hzw/TiledMapView/blob/master/library/src/main/java/cn/forward/tiledmapview/overlay/BitmapMapOverlay.java), if you want add a bitmap overlay.
 
-***可以通过使用[BitmapPixelOverlay]()/[BitmapMapOverlay]()添加图片覆盖物***
+***可以通过使用[BitmapPixelOverlay](https://github.com/1993hzw/TiledMapView/blob/master/library/src/main/java/cn/forward/tiledmapview/overlay/BitmapPixelOverlay.java)/[BitmapMapOverlay](https://github.com/1993hzw/TiledMapView/blob/master/library/src/main/java/cn/forward/tiledmapview/overlay/BitmapMapOverlay.java)添加图片覆盖物***
 
 # Extending 拓展
+
+There is [a sample of LOL game map](https://github.com/1993hzw/TiledMapView/tree/master/app/src/main/java/cn/forward/tiledmapview/demo/lol) which shows how to load the custom tiled map.
+
+***这里有一个加载[LOL游戏地图的示例](https://github.com/1993hzw/TiledMapView/tree/master/app/src/main/java/cn/forward/tiledmapview/demo/lol)，显示了如何加载自定义瓦片地图***
 
 TiledMapView is a powerful, customizable and extensible loading library. There will be more documentation in the future, but you can now find more features by reading the code. Just enjoy it!
 

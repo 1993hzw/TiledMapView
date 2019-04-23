@@ -1,4 +1,4 @@
-package cn.forward.tiledmapview.demo;
+package cn.forward.tiledmapview.demo.lol;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.widget.CompoundButton;
 import cn.forward.androids.utils.StatusBarUtil;
 import cn.forward.androids.utils.Util;
 import cn.forward.tiledmapview.TiledMapView;
-import cn.forward.tiledmapview.demo.lol.LOLTileLayer;
+import cn.forward.tiledmapview.demo.R;
 import cn.forward.tiledmapview.overlay.TextMapOverlay;
 import cn.forward.tiledmapview.overlay.TextPixelOverlay;
 

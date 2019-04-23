@@ -38,7 +38,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="5dp"
-            android:src="@mipmap/ic_location_btn" />
+            android:src="@drawable/ic_location_btn" />
     </cn.forward.androids.views.SFrameLayout>
 
 

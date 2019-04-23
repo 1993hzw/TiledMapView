@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MapTileLoader</string>
+    <string name="app_name">TiledMapViewDemo</string>
 
     <string name="satellite_map">Satellite</string>
     <string name="vector_map">Vector</string>

@@ -148,7 +148,7 @@ public class TiledMapDemoActivity extends FragmentActivity {
     }
 
     private void initOverlay(final ITiledMapView mapView) {
-        mBitmapMapOverlay = new BitmapPixelOverlay(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_location), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+        mBitmapMapOverlay = new BitmapPixelOverlay(BitmapFactory.decodeResource(getResources(), R.drawable.ic_location), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
         mBitmapMapOverlay.setVisible(false);
         mBitmapMapOverlay.setId(R.id.bitmap_location);
 

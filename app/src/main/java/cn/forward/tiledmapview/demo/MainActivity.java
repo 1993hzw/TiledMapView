@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import cn.forward.tiledmapview.TiledMapView;
+import cn.forward.tiledmapview.demo.lol.LolMapDemoActivity;
 
 public class MainActivity extends AppCompatActivity {
 
