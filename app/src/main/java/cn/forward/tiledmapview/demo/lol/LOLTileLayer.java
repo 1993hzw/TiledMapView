@@ -13,7 +13,8 @@ import cn.forward.tiledmapview.layer.TileLayer;
 public class LOLTileLayer extends TileLayer {
 
     public LOLTileLayer(ITiledMapView mapView) {
-        initialize(mapView.getContext(), new TileImageCache(mapView, new LOLTileImageSource(), new PicassoTileImageLoader()));
+        initialize(mapView.getContext(), new TileImageCache(mapView, new LOLTileImageSource(),
+                new PicassoTileImageLoader()));
 
         mapView.setTileConfig(new ImageTileConfig(new ImageInfo(12200, 10240), 0, 6));
 

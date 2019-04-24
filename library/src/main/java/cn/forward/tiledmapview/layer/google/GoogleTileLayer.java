@@ -14,11 +14,11 @@ import cn.forward.tiledmapview.projection.WebMercatorProjection;
 public class GoogleTileLayer extends TileLayer {
 
     public GoogleTileLayer(ITiledMapView mapView, GoogleOnlineTileImageSource.ImgType imgType) {
-        this(mapView, imgType, 2f, "zh-CN");
+        this(mapView, imgType, 2f, "zh-CN", new PicassoTileImageLoader());
     }
 
-    public GoogleTileLayer(ITiledMapView mapView, GoogleOnlineTileImageSource.ImgType imgType, float scale, String language) {
-        initialize(mapView.getContext(), new TileImageCache(mapView, new GoogleOnlineTileImageSource(imgType, scale, language), new PicassoTileImageLoader()));
+    public GoogleTileLayer(ITiledMapView mapView, GoogleOnlineTileImageSource.ImgType imgType, float scale, String language, TileImageCache.ITileImageLoader imageLoader) {
+        initialize(mapView.getContext(), new TileImageCache(mapView, new GoogleOnlineTileImageSource(imgType, scale, language), imageLoader));
 
         mapView.setTileConfig(new WebMercatorTileConfig(0, 17, scale));
         IProjection projection = new WebMercatorProjection(); // 由于tile url没有gl=CN参数，故无需进行Wgs84ToGcj02Transformation

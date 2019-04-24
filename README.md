@@ -9,13 +9,12 @@ Tiled map loader for Android , supports a variety of projections, including Web 
 ![googlemap](https://raw.githubusercontent.com/1993hzw/common/master/tiledmap/googlemap.gif)
 
 ![tianditu](https://raw.githubusercontent.com/1993hzw/common/master/tiledmap/tianditu.png)
-![lol](https://raw.githubusercontent.com/1993hzw/common/master/tiledmap/lol.png)
 
 # Usage 用法
 
 #### Gradle 
 
-```
+```gradle
 allprojects {
     repositories {
         ...
@@ -25,6 +24,16 @@ allprojects {
  
 dependencies {
     compile 'com.github.1993hzw:TiledMapView:1.0'
+}
+```
+
+TiledMapView uses the library Picasso as the default images loader. So you should add the additional dependence if you want to use the Picasso :
+
+***TiledMapView使用Picasso库作为默认图像加载程序。因此，如果你想使用Picasso，应该额外增加依赖：***
+
+```
+dependencies {
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }
 ```
 
@@ -81,6 +90,8 @@ You can use [BitmapPixelOverlay](https://github.com/1993hzw/TiledMapView/blob/ma
 There is [a sample of LOL game map](https://github.com/1993hzw/TiledMapView/tree/master/app/src/main/java/cn/forward/tiledmapview/demo/lol) which shows how to load the custom tiled map.
 
 ***这里有一个加载[LOL游戏地图的示例](https://github.com/1993hzw/TiledMapView/tree/master/app/src/main/java/cn/forward/tiledmapview/demo/lol)，显示了如何加载自定义瓦片地图***
+
+![lol](https://raw.githubusercontent.com/1993hzw/common/master/tiledmap/lol.png)
 
 TiledMapView is a powerful, customizable and extensible loading library. There will be more documentation in the future, but you can now find more features by reading the code. Just enjoy it!
 

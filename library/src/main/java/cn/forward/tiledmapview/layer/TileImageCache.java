@@ -21,6 +21,10 @@ public class TileImageCache implements ITileImageCache {
     private ObjectRecycler<TileImage> mTileImagesRecycler;
     private Bitmap mPlaceHolder;
 
+    public TileImageCache(final ITiledMapView mapView, ITileImageSource tileImageSource) {
+        this(mapView, tileImageSource, new PicassoTileImageLoader());
+    }
+
     public TileImageCache(final ITiledMapView mapView, ITileImageSource tileImageSource, ITileImageLoader imageLoader) {
         this.mTileImageSource = tileImageSource;
         this.mMapView = mapView;

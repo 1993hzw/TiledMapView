@@ -8,7 +8,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.os.Process;
+import android.support.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -158,7 +159,7 @@ public class MapLocationManager {
             throw new RuntimeException("The listener has been added.");
         }
 
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             LogUtil.d("MapLocationManager", "没有gps定位权限");
             return false;
         }
@@ -209,6 +210,14 @@ public class MapLocationManager {
         this.nGpsListenerMap.put(listener, innerLocationListener);
 
         return true;
+    }
+
+    public static int checkSelfPermission(@NonNull Context context, @NonNull String permission) {
+        if (permission == null) {
+            throw new IllegalArgumentException("permission is null");
+        }
+
+        return context.checkPermission(permission, android.os.Process.myPid(), Process.myUid());
     }
 
 }

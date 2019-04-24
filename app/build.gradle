@@ -26,6 +26,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':library')
+//    implementation 'com.github.1993hzw:TiledMapView:1.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.1993hzw:Androids:1.2.4'
 }
