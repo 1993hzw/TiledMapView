@@ -9,6 +9,10 @@ import cn.forward.tiledmapview.core.ITileConfig;
 import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.ITileDisplayInfo;
 
+/**
+ * Bitmap overlay on the map, relative to map coordinates in size.
+ * 地图坐标系上的图片覆盖物，相对于地图坐标的大小
+ */
 public class BitmapMapOverlay extends AbstractMapOverlay {
 
     private Bitmap mBitmap;

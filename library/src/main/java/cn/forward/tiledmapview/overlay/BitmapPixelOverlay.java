@@ -9,6 +9,10 @@ import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.ITileConfig;
 import cn.forward.tiledmapview.core.ITileDisplayInfo;
 
+/**
+ * Bitmap overlay on the pixel (such as the window), relative to pixel coordinates in size.
+ * 像素坐标系上的图片覆盖物，如窗口，相对于像素坐标的大小
+ */
 public class BitmapPixelOverlay extends AbstractPixelOverlay {
 
     private Bitmap mBitmap;

@@ -5,7 +5,6 @@ import java.util.Locale;
 import cn.forward.tiledmapview.core.ITileImageSource;
 import cn.forward.tiledmapview.core.Tile;
 
-//asset resource > file:///android_asset/
 public class GoogleOnlineTileImageSource implements ITileImageSource {
 
     public enum ImgType {
@@ -47,6 +46,14 @@ public class GoogleOnlineTileImageSource implements ITileImageSource {
                 "https://mt%s.google.cn/maps/vt?lyrs=%s&scale=%s&hl=%s&x=%d&y=%d&z=%d",
                 mServerId, mImgType, mScale, mLanguage, tile.col, tile.row, tile.level);
         return uri;
+    }
+
+    public void setServerId(int serverId) {
+        mServerId = serverId;
+    }
+
+    public int getServerId() {
+        return mServerId;
     }
 
     public void setScale(float scale) {

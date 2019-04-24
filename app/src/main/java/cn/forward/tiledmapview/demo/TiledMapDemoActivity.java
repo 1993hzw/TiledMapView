@@ -43,6 +43,14 @@ import cn.forward.tiledmapview.overlay.TextPixelOverlay;
  */
 public class TiledMapDemoActivity extends FragmentActivity {
 
+    /**
+     * Using Tianditu API, you need to apply for a key
+     * 使用天地图API，需要申请秘钥
+     *
+     * @see <a href="https://console.tianditu.gov.cn/api/key">Tianditu API key</a>
+     */
+    public static String TIANDITU_KEY = "b34f09c6586e9741629c42f716b7494b"; // Only for test! Please apply for the key.
+
     public static final int REQUEST_CODE_PERMISSION = 100;
     public static final String TYPE = "type";
     private TileType mTileType;
@@ -193,17 +201,17 @@ public class TiledMapDemoActivity extends FragmentActivity {
         mTileLayerGroup.clear();
         if (mTileType == TileType.Tianditu) {
             // tile
-            mTileLayerGroup.add(new TiandituTileLayer(mMapView, mImgType, mProjectionType));
+            mTileLayerGroup.add(new TiandituTileLayer(mMapView, mImgType, mProjectionType, TIANDITU_KEY));
             if (mHasMarker) {
                 switch (mImgType) {
                     case SATELLITE:
-                        mTileLayerGroup.add(new TiandituTileLayer(mMapView, TiandituOnlineTileImageSource.ImgType.SATELLITE_ONLY_MARKER, mProjectionType));
+                        mTileLayerGroup.add(new TiandituTileLayer(mMapView, TiandituOnlineTileImageSource.ImgType.SATELLITE_ONLY_MARKER, mProjectionType, TIANDITU_KEY));
                         break;
                     case VECTOR:
-                        mTileLayerGroup.add(new TiandituTileLayer(mMapView, TiandituOnlineTileImageSource.ImgType.VECTOR_ONLY_MARKER, mProjectionType));
+                        mTileLayerGroup.add(new TiandituTileLayer(mMapView, TiandituOnlineTileImageSource.ImgType.VECTOR_ONLY_MARKER, mProjectionType, TIANDITU_KEY));
                         break;
                     case TERRAIN:
-                        mTileLayerGroup.add(new TiandituTileLayer(mMapView, TiandituOnlineTileImageSource.ImgType.TERRAIN_ONLY_MARKER, mProjectionType));
+                        mTileLayerGroup.add(new TiandituTileLayer(mMapView, TiandituOnlineTileImageSource.ImgType.TERRAIN_ONLY_MARKER, mProjectionType, TIANDITU_KEY));
                         break;
                 }
             }

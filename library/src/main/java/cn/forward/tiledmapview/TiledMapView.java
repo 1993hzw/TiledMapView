@@ -583,6 +583,14 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
     public static boolean isDebugMode() {
         return sDebugMode;
     }
+
+    public static void openLog(boolean open) {
+        LogUtil.sIsLog = open;
+    }
+
+    public static boolean isLogOpened() {
+        return LogUtil.sIsLog;
+    }
 }
 
 

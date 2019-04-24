@@ -8,9 +8,13 @@ import android.text.TextPaint;
 import android.view.Gravity;
 
 import cn.forward.tiledmapview.core.ITileConfig;
-import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.ITileDisplayInfo;
+import cn.forward.tiledmapview.core.ITiledMapView;
 
+/**
+ * Text overlay on the pixel (such as the window), relative to pixel coordinates in size.
+ * 像素坐标系上的文字覆盖物，如窗口，相对于像素坐标的大小
+ */
 public class TextPixelOverlay extends AbstractPixelOverlay {
 
     public static final int WRAP_CONTENT = -1;

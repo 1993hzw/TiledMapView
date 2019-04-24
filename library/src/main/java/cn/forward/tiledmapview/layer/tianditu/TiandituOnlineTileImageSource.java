@@ -5,8 +5,7 @@ import java.util.Locale;
 import cn.forward.tiledmapview.core.ITileImageSource;
 import cn.forward.tiledmapview.core.Tile;
 
-//asset resource > file:///android_asset/
-//http://lbs.tianditu.gov.cn/server/MapService.html
+// http://lbs.tianditu.gov.cn/server/MapService.html
 public class TiandituOnlineTileImageSource implements ITileImageSource {
 
     public enum ProjectionType {
@@ -41,21 +40,31 @@ public class TiandituOnlineTileImageSource implements ITileImageSource {
     private int mServerId = 0; // 0-7
     private ImgType mImgType;
     private ProjectionType mProjectionType;
+    private String mKey;
 
-    public TiandituOnlineTileImageSource() {
-        this(ImgType.SATELLITE, ProjectionType.WEB_MERCATOR);
+    public TiandituOnlineTileImageSource(String key) {
+        this(ImgType.SATELLITE, ProjectionType.WEB_MERCATOR, key);
     }
 
-    public TiandituOnlineTileImageSource(ImgType imgType, ProjectionType projectionType) {
+    public TiandituOnlineTileImageSource(ImgType imgType, ProjectionType projectionType, String key) {
         mImgType = imgType;
         mProjectionType = projectionType;
+        mKey = key;
     }
 
     public String getUri(Tile tile) {
         String uri = String.format(Locale.getDefault(),
                 "https://t%s.tianditu.gov.cn/%s_%s/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=%s&STYLE=default&TILEMATRIXSET=%s&FORMAT=tiles&TILEMATRIX=%s&TILEROW=%s&TILECOL=%s&tk=%s",
-                mServerId, mImgType, mProjectionType, mImgType, mProjectionType, tile.level, tile.row, tile.col, "b34f09c6586e9741629c42f716b7494b");
+                mServerId, mImgType, mProjectionType, mImgType, mProjectionType, tile.level, tile.row, tile.col, mKey);
         return uri;
+    }
+
+    public void setServerId(int serverId) {
+        mServerId = serverId;
+    }
+
+    public int getServerId() {
+        return mServerId;
     }
 
     public void setImgType(ImgType imgType) {

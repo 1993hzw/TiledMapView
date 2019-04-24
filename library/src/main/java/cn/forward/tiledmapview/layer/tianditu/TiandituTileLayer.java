@@ -16,8 +16,15 @@ import cn.forward.tiledmapview.projection.WebMercatorProjection;
  */
 public class TiandituTileLayer extends TileLayer {
 
-    public TiandituTileLayer(ITiledMapView mapView, TiandituOnlineTileImageSource.ImgType imgType, TiandituOnlineTileImageSource.ProjectionType projectionType) {
-        ITileImageCache imageCache = new TileImageCache(mapView, new TiandituOnlineTileImageSource(imgType, projectionType), new PicassoTileImageLoader());
+    /**
+     * @param mapView
+     * @param imgType
+     * @param projectionType
+     * @param key            Using Tianditu API, you need to apply for a key. 使用天地图API，需要申请秘钥
+     * @see <a href="https://console.tianditu.gov.cn/api/key">Tianditu API key</a>
+     */
+    public TiandituTileLayer(ITiledMapView mapView, TiandituOnlineTileImageSource.ImgType imgType, TiandituOnlineTileImageSource.ProjectionType projectionType, String key) {
+        ITileImageCache imageCache = new TileImageCache(mapView, new TiandituOnlineTileImageSource(imgType, projectionType, key), new PicassoTileImageLoader());
         initialize(mapView.getContext(), imageCache);
 
         if (projectionType == TiandituOnlineTileImageSource.ProjectionType.LNG_LAT) {

@@ -7,7 +7,7 @@ import cn.forward.tiledmapview.BuildConfig;
 public class LogUtil {
     public static String LOG_DIR = "ALog";
     public static final String LOG_TAG = "log";
-    public static boolean sIsLog = BuildConfig.DEBUG;
+    public static boolean sIsLog = false;
 
     public static void d(String paramString) {
         d("log", paramString);
