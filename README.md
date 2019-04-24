@@ -31,7 +31,7 @@ TiledMapView uses the library Picasso as the default images loader. So you shoul
 
 ***TiledMapView使用Picasso库作为默认图像加载程序。因此，如果你想使用Picasso，应该额外增加依赖：***
 
-```
+```gradle
 dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 }
