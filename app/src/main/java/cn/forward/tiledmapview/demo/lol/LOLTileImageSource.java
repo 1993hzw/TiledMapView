@@ -10,7 +10,7 @@ public class LOLTileImageSource implements ITileImageSource {
 
     public String getUri(Tile tile) {
         String uri = String.format(Locale.getDefault(),
-                "file:///android_asset/%d/%d_%d.jpg", tile.level, tile.col, tile.row);
+                "file:///android_asset/lol/%d/%d_%d.png", tile.level, tile.col, tile.row);
         return uri;
     }
 }
