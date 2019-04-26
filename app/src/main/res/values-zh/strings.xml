@@ -5,6 +5,7 @@
     <string name="vector_map">矢量图</string>
     <string name="terrain_map">地形图</string>
     <string name="marker">标记</string>
+    <string name="contour">轮廓图层</string>
 
     <string name="here">你在这!</string>
     <string name="lng_lat_projection">经纬度等间投影</string>

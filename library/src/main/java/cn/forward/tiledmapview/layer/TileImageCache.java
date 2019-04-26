@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.layer;
 
 import android.graphics.Bitmap;
@@ -42,6 +42,10 @@ public class TileImageCache implements ITileImageCache {
     }
 
     public TileImageCache(final ITiledMapView mapView, ITileImageSource tileImageSource, ITileImageLoader imageLoader) {
+        this(mapView, tileImageSource, imageLoader, null);
+    }
+
+    public TileImageCache(final ITiledMapView mapView, ITileImageSource tileImageSource, ITileImageLoader imageLoader, Bitmap placeHolder) {
         this.mTileImageSource = tileImageSource;
         this.mMapView = mapView;
         mImageLoader = imageLoader;
@@ -53,7 +57,7 @@ public class TileImageCache implements ITileImageCache {
             }
         });
 
-        mPlaceHolder = BitmapFactory.decodeResource(mapView.getContext().getResources(), R.drawable.grid);
+        mPlaceHolder = placeHolder;
     }
 
     public ITileImageLoader getImageLoader() {

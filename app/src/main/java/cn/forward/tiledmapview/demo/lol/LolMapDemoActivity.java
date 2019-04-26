@@ -10,6 +10,7 @@ import cn.forward.androids.utils.StatusBarUtil;
 import cn.forward.androids.utils.Util;
 import cn.forward.tiledmapview.TiledMapView;
 import cn.forward.tiledmapview.demo.R;
+import cn.forward.tiledmapview.demo.lol.contour.LOLTileLayerContour;
 import cn.forward.tiledmapview.overlay.TextMapOverlay;
 import cn.forward.tiledmapview.overlay.TextPixelOverlay;
 
@@ -28,6 +29,10 @@ public class LolMapDemoActivity extends FragmentActivity {
         LOLTileLayer tileLayer = new LOLTileLayer(mMapView);
         mMapView.getLayerGroup().add(tileLayer);
 
+        // crop
+        final LOLTileLayerContour tileLayerCrop = new LOLTileLayerContour(mMapView);
+        mMapView.getLayerGroup().add(tileLayerCrop);
+
         ((CheckBox) findViewById(R.id.tiles)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -39,6 +44,14 @@ public class LolMapDemoActivity extends FragmentActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 TiledMapView.setDebugMode(isChecked);
+                mMapView.refresh();
+            }
+        });
+
+        ((CheckBox) findViewById(R.id.contour)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                tileLayerCrop.setVisible(isChecked);
                 mMapView.refresh();
             }
         });

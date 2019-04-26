@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.layer.google;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import cn.forward.tiledmapview.config.WebMercatorTileConfig;
 import cn.forward.tiledmapview.core.ITiledMapView;
@@ -34,7 +37,8 @@ public class GoogleTileLayer extends TileLayer {
     }
 
     public GoogleTileLayer(ITiledMapView mapView, GoogleOnlineTileImageSource.ImgType imgType, float scale, String language, TileImageCache.ITileImageLoader imageLoader) {
-        initialize(mapView.getContext(), new TileImageCache(mapView, new GoogleOnlineTileImageSource(imgType, scale, language), imageLoader));
+        Bitmap placeHolder = BitmapFactory.decodeResource(mapView.getContext().getResources(), cn.forward.tiledmapview.R.drawable.grid);
+        initialize(mapView.getContext(), new TileImageCache(mapView, new GoogleOnlineTileImageSource(imgType, scale, language), imageLoader, placeHolder));
 
         mapView.setTileConfig(new WebMercatorTileConfig(0, 17, scale));
         IProjection projection = new WebMercatorProjection(); // 由于tile url没有gl=CN参数，故无需进行Wgs84ToGcj02Transformation

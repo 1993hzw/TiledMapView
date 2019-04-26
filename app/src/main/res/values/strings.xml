@@ -5,6 +5,7 @@
     <string name="vector_map">Vector</string>
     <string name="terrain_map">Terrain</string>
     <string name="marker">Marker</string>
+    <string name="contour">Contour layer</string>
 
     <string name="here">You are here!</string>
     <string name="lng_lat_projection">Longitude latitude projection </string>

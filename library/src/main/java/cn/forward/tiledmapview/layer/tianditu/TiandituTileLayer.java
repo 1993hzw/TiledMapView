@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.layer.tianditu;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import cn.forward.tiledmapview.config.LngLatProjectionTileConfig;
 import cn.forward.tiledmapview.config.WebMercatorTileConfig;
-import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.IProjection;
 import cn.forward.tiledmapview.core.ITileImageCache;
+import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.layer.PicassoTileImageLoader;
 import cn.forward.tiledmapview.layer.TileImageCache;
 import cn.forward.tiledmapview.layer.TileLayer;
@@ -49,7 +52,8 @@ public class TiandituTileLayer extends TileLayer {
                              TiandituOnlineTileImageSource.ProjectionType projectionType,
                              String key,
                              TileImageCache.ITileImageLoader tileImageLoader) {
-        ITileImageCache imageCache = new TileImageCache(mapView, new TiandituOnlineTileImageSource(imgType, projectionType, key), tileImageLoader);
+        Bitmap placeHolder = BitmapFactory.decodeResource(mapView.getContext().getResources(), cn.forward.tiledmapview.R.drawable.grid);
+        ITileImageCache imageCache = new TileImageCache(mapView, new TiandituOnlineTileImageSource(imgType, projectionType, key), tileImageLoader, placeHolder);
         initialize(mapView.getContext(), imageCache);
 
         if (projectionType == TiandituOnlineTileImageSource.ProjectionType.LNG_LAT) {

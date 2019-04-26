@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.layer;
 
 import android.content.Context;
@@ -149,7 +149,7 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
             mTempRect.set(topLeftPoint.x, topLeftPoint.y, topLeftPoint.x + imgWidth + 0.5F, topLeftPoint.y + imgHeight + 0.5F);
             if (bitmap != null) {
                 canvas.drawBitmap(bitmap, null, mTempRect, null);
-            } else {
+            } else if (getTileImageCache().getPlaceHolder(tile, mapView) != null) {
                 canvas.drawBitmap(getTileImageCache().getPlaceHolder(tile, mapView), null, mTempRect, null);
             }
         }
