@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.core;
 
 /**
@@ -28,6 +28,10 @@ public interface ITileLayer extends ILayer {
 
     public void setOffscreenTileLimit(int limit);
 
+    /**
+     * Set the number of tiles that should be retained to either side of the current screen.
+     * 设置应保留到当前屏幕任一侧的切片数量
+     */
     public int getOffscreenTileLimit();
 
 }

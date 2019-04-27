@@ -177,6 +177,10 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
         mOffscreenTileLimit = Math.max(0, limit);
     }
 
+    /**
+     * Set the number of tiles that should be retained to either side of the current screen.
+     * 设置应保留到当前屏幕任一侧的切片数量.
+     */
     @Override
     public int getOffscreenTileLimit() {
         return mOffscreenTileLimit;

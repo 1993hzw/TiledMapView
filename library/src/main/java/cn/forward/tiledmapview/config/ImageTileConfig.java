@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.config;
 
 import cn.forward.tiledmapview.core.ITileConfig;
@@ -47,12 +47,27 @@ public class ImageTileConfig extends AbstractTileConfig {
 
     }
 
+    public ImageTileConfig(int srcImgLevel, int minLevel, int maxLevel) {
+        this(srcImgLevel, minLevel, maxLevel, 1);
+
+    }
+
     /**
      *
+     * @param srcImgLevel 源图片对应的级别
+     * @param minLevel
+     * @param maxLevel
+     * @param imgScale
+     */
+    public ImageTileConfig(int srcImgLevel, int minLevel, int maxLevel, float imgScale) {
+        this(new ImageInfo((int) (Math.pow(2, srcImgLevel) * 256), (int) (Math.pow(2, srcImgLevel) * 256)), minLevel, maxLevel, imgScale);
+    }
+
+    /**
      * @param imageInfo 图片信息
      * @param minLevel
      * @param maxLevel
-     * @param imgScale 瓦片图片缩放
+     * @param imgScale  瓦片图片缩放
      */
     public ImageTileConfig(ImageInfo imageInfo, int minLevel, int maxLevel, float imgScale) {
         if (minLevel < 0) {
@@ -96,11 +111,13 @@ public class ImageTileConfig extends AbstractTileConfig {
             // 处理图片大小刚好能被256整除的情况
             if (rowAutoFit || colAutoFit) {
                 int scale = maxImageSize / (int) (Math.pow(2, level) * 256);
-                if (rowAutoFit && imageInfo.getHeight() / scale % 256 == 0) {
-                    maxTile.row--;
-                }
-                if (colAutoFit && imageInfo.getWidth() / scale % 256 == 0) {
-                    maxTile.col--;
+                if (scale > 0) {
+                    if (rowAutoFit && imageInfo.getHeight() / scale % 256 == 0) {
+                        maxTile.row--;
+                    }
+                    if (colAutoFit && imageInfo.getWidth() / scale % 256 == 0) {
+                        maxTile.col--;
+                    }
                 }
             }
             this.mRowMaxIndices[index] = Math.min(maxTile.row, (int) Math.pow(2, level) - 1);

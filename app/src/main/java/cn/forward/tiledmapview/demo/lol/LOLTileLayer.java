@@ -20,9 +20,13 @@ public class LOLTileLayer extends TileLayer {
         initialize(mapView.getContext(), new TileImageCache(mapView, new LOLTileImageSource(),
                 new PicassoTileImageLoader(), placeHolder));
 
+        // The full image size is 12200x10240, which image level is 6.
         mapView.setTileConfig(new ImageTileConfig(new ImageInfo(12200, 10240), 0, 6));
 
-        setOffscreenTileLimit(2);
+        // You can also use the source image level, but it will fills the remaining map with blank tiles.
+        //mapView.setTileConfig(new ImageTileConfig(6, 0, 6));
+
+        setOffscreenTileLimit(1); //  Set the number of tiles that should be retained to either side of the current screen
     }
 
 }
