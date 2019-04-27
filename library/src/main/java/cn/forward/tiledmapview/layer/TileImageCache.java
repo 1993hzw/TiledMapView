@@ -17,13 +17,11 @@
 package cn.forward.tiledmapview.layer;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
-import cn.forward.tiledmapview.R;
-import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.ITileImageCache;
 import cn.forward.tiledmapview.core.ITileImageSource;
 import cn.forward.tiledmapview.core.ITileLayer;
+import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.Tile;
 import cn.forward.tiledmapview.util.ObjectRecycler;
 

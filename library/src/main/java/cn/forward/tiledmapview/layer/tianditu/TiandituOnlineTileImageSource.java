@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.layer.tianditu;
 
 import java.util.Locale;
@@ -69,10 +69,15 @@ public class TiandituOnlineTileImageSource implements ITileImageSource {
     }
 
     public String getUri(Tile tile) {
-        String uri = String.format(Locale.getDefault(),
+       /* String uri = String.format(Locale.getDefault(),
                 "https://t%s.tianditu.gov.cn/%s_%s/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=%s&STYLE=default&TILEMATRIXSET=%s&FORMAT=tiles&TILEMATRIX=%s&TILEROW=%s&TILECOL=%s&tk=%s",
-                mServerId, mImgType, mProjectionType, mImgType, mProjectionType, tile.level, tile.row, tile.col, mKey);
-        return uri;
+                mServerId, mImgType, mProjectionType, mImgType, mProjectionType, tile.level, tile.row, tile.col, mKey);*/
+
+        // better performance
+        return "https://t" + mServerId + ".tianditu.gov.cn/" + mImgType + "_" + mProjectionType +
+                "/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=" + mImgType +
+                "&STYLE=default&TILEMATRIXSET=" + mProjectionType +
+                "&FORMAT=tiles&TILEMATRIX=" + tile.level + "&TILEROW=" + tile.row + "&TILECOL=" + tile.col + "&tk=" + mKey;
     }
 
     public void setServerId(int serverId) {

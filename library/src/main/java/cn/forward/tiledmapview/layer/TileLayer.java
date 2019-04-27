@@ -144,8 +144,15 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
 
         for (int i = 0; i < mTiles.length; i++) {
             Tile tile = mTiles[i];
+            Bitmap bitmap = getTileImageCache().getTileBitmap(tile, mapView); // load bitmap first
+            if (tile.row < tileDisplayInfo.getLeftTopRow() || tile.row > tileDisplayInfo.getRightBottomRow()) { // skip drawing
+                continue;
+            }
+            if (tile.col < tileDisplayInfo.getLeftTopCol() || tile.col > tileDisplayInfo.getRightBottomCol()) { // skip drawing
+                continue;
+            }
+
             PointF topLeftPoint = mapView.mapPoint2ViewPoint(tileConfig.getTileLetTopMapPoint(tile));
-            Bitmap bitmap = getTileImageCache().getTileBitmap(tile, mapView);
             mTempRect.set(topLeftPoint.x, topLeftPoint.y, topLeftPoint.x + imgWidth + 0.5F, topLeftPoint.y + imgHeight + 0.5F);
             if (bitmap != null) {
                 canvas.drawBitmap(bitmap, null, mTempRect, null);

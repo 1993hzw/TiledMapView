@@ -26,6 +26,7 @@ import cn.forward.tiledmapview.layer.PicassoTileImageLoader;
 import cn.forward.tiledmapview.layer.TileImageCache;
 import cn.forward.tiledmapview.layer.TileLayer;
 import cn.forward.tiledmapview.projection.WebMercatorProjection;
+import cn.forward.tiledmapview.projection.Wgs84ToGcj02Transformation;
 
 /**
  * @author ziwei huang
@@ -41,7 +42,7 @@ public class GoogleTileLayer extends TileLayer {
         initialize(mapView.getContext(), new TileImageCache(mapView, new GoogleOnlineTileImageSource(imgType, scale, language), imageLoader, placeHolder));
 
         mapView.setTileConfig(new WebMercatorTileConfig(0, 17, scale));
-        IProjection projection = new WebMercatorProjection(); // 由于tile url没有gl=CN参数，故无需进行Wgs84ToGcj02Transformation
+        IProjection projection = new WebMercatorProjection(new Wgs84ToGcj02Transformation()); // 由于tile url有gl=CN参数，故需进行Wgs84ToGcj02Transformation
         mapView.setProjection(projection);
     }
 

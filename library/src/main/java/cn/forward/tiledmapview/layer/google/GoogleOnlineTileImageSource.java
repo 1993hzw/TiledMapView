@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-package cn.forward.tiledmapview.layer.google;
 
-import java.util.Locale;
+package cn.forward.tiledmapview.layer.google;
 
 import cn.forward.tiledmapview.core.ITileImageSource;
 import cn.forward.tiledmapview.core.Tile;
@@ -58,10 +56,12 @@ public class GoogleOnlineTileImageSource implements ITileImageSource {
     }
 
     public String getUri(Tile tile) {
-        String uri = String.format(Locale.getDefault(),
+        /*String uri = String.format(Locale.getDefault(),
                 "https://mt%s.google.cn/maps/vt?lyrs=%s&scale=%s&hl=%s&x=%d&y=%d&z=%d",
-                mServerId, mImgType, mScale, mLanguage, tile.col, tile.row, tile.level);
-        return uri;
+                mServerId, mImgType, mScale, mLanguage, tile.col, tile.row, tile.level);*/
+
+        // better performance
+        return "https://mt" + mServerId + ".google.cn/maps/vt?&gl=CN&lyrs=" + mImgType + "&scale=" + mScale + "&hl=" + mLanguage + "&x=" + tile.col + "&y=" + tile.row + "&z=" + tile.level + "";
     }
 
     public void setServerId(int serverId) {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.util;
 
 import java.util.Arrays;
@@ -58,6 +58,10 @@ public class GeoUtil {
      * WGS84 转 GCj02
      */
     public static double[] wgs84ToGcj02(double lng, double lat) {
+        if (outOfChina(lng, lat)) {
+            return new double[]{lng, lat};
+        }
+
         double dlat = transformLatitude(lng - 105.0, lat - 35.0);
         double dlng = transformLongitude(lng - 105.0, lat - 35.0);
         double radlat = lat / 180.0 * PI;
@@ -76,6 +80,10 @@ public class GeoUtil {
      * GCJ02 转 WGS84
      */
     public static double[] gcj02ToWgs84(final double lng, final double lat) {
+        if (outOfChina(lng, lat)) {
+            return new double[]{lng, lat};
+        }
+
         double dLat = transformLatitude(lng - 105.0, lat - 35.0);
         double dLon = transformLongitude(lng - 105.0, lat - 35.0);
         double radLat = lat / 180.0 * PI;
@@ -122,6 +130,15 @@ public class GeoUtil {
         ret += (20.0 * Math.sin(lng * PI) + 40.0 * Math.sin(lng / 3.0 * PI)) * 2.0 / 3.0;
         ret += (150.0 * Math.sin(lng / 12.0 * PI) + 300.0 * Math.sin(lng / 30.0 * PI)) * 2.0 / 3.0;
         return ret;
+    }
+
+    public static boolean outOfChina(double lng, double lat) {
+        if (lng < 72.004 || lng > 137.8347) {
+            return true;
+        } else if (lat < 0.8293 || lat > 55.8271) {
+            return true;
+        }
+        return false;
     }
 
     // test
