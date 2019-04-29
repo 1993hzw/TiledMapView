@@ -55,12 +55,12 @@ public abstract class AbstractOverlay extends AbstractLayer {
     }
 
     public void setWidth(double width) {
-        mWidth = Math.max(width, 0);
+        mWidth = width;
         notifyPropertiesChanged();
     }
 
     public void setHeight(double height) {
-        mHeight = Math.max(height, 0);
+        mHeight = height;
         notifyPropertiesChanged();
     }
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.overlay;
 
 import android.graphics.Canvas;
@@ -57,8 +57,14 @@ public class TextMapOverlay extends AbstractMapOverlay {
         return mTextPaint;
     }
 
+    public void setText(CharSequence text) {
+        setText(text, WRAP_CONTENT, WRAP_CONTENT);
+    }
+
     public void setText(CharSequence text, double width, double height) {
         mText = text;
+        setWidth(width);
+        setHeight(height);
         notifyPropertiesChanged();
     }
 
@@ -68,7 +74,7 @@ public class TextMapOverlay extends AbstractMapOverlay {
 
     @Override
     public void onPropertiesChanged(@NonNull ITiledMapView mapView, @NonNull ITileConfig tileConfig, @NonNull ITileDisplayInfo tileDisplayInfo) {
-        float width = getWidth() == WRAP_CONTENT ? mTextPaint.measureText(mText.toString()) : (float) getWidth();
+        float width = getWidth() == WRAP_CONTENT ? measureText(mText.toString()) : (float) getWidth();
         mLayout = new StaticLayout(mText, mTextPaint, (int) width, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         if (getWidth() == WRAP_CONTENT) {
             setWidth(mLayout.getWidth());
@@ -79,6 +85,18 @@ public class TextMapOverlay extends AbstractMapOverlay {
         }
 
         super.onPropertiesChanged(mapView, tileConfig, tileDisplayInfo);
+    }
+
+    private float measureText(String text) {
+        String[] list = text.split("\n");
+        float max = 0;
+        for (String s : list) {
+            float w = mTextPaint.measureText(s);
+            if (w > max) {
+                max = w;
+            }
+        }
+        return max;
     }
 
     @Override

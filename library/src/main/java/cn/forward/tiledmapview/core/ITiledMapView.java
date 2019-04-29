@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.core;
 
 import android.content.Context;
@@ -91,6 +91,8 @@ public interface ITiledMapView {
     public ITileConfig getTileConfig();
 
     public void setTileConfig(ITileConfig tileConfig);
+
+    public ITileDisplayInfo getTileDisplayInfo();
 
 }
 

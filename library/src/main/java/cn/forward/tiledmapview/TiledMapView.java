@@ -530,6 +530,11 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
     }
 
     @Override
+    public ITileDisplayInfo getTileDisplayInfo() {
+        return mTileDisplayInfo;
+    }
+
+    @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mLayerGroup.onAttachedToView();

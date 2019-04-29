@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.core;
 
 import android.os.Parcel;
@@ -73,6 +73,11 @@ public class LngLat implements Parcelable {
             return new LngLat[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "LngLat=[" + longitude + ", " + latitude + "]";
+    }
 }
 
 

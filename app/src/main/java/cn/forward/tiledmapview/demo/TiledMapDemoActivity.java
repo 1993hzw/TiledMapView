@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -26,6 +28,8 @@ import cn.forward.androids.views.ScrollPickerView;
 import cn.forward.androids.views.StringScrollPicker;
 import cn.forward.tiledmapview.LayerGroup;
 import cn.forward.tiledmapview.MapLocationManager;
+import cn.forward.tiledmapview.MapOnTouchGestureListener;
+import cn.forward.tiledmapview.MapTouchDetector;
 import cn.forward.tiledmapview.TiledMapView;
 import cn.forward.tiledmapview.core.ITileLayer;
 import cn.forward.tiledmapview.core.ITiledMapView;
@@ -67,6 +71,8 @@ public class TiledMapDemoActivity extends FragmentActivity {
     private TiandituOnlineTileImageSource.ProjectionType mProjectionType = TiandituOnlineTileImageSource.ProjectionType.LNG_LAT;
     private boolean mHasMarker = true;
 
+    private TextPixelOverlay mDebugTapLocationInfo;
+
     @Override
     protected void onCreate(@Nullable Bundle paramBundle) {
         super.onCreate(paramBundle);
@@ -87,6 +93,7 @@ public class TiledMapDemoActivity extends FragmentActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 TiledMapView.setDebugMode(isChecked);
+                mDebugTapLocationInfo.setVisible(isChecked);
                 mMapView.refresh();
             }
         });
@@ -191,6 +198,30 @@ public class TiledMapDemoActivity extends FragmentActivity {
                 throw new AssertionError("getTag by key error");
             }
         }
+
+
+        mDebugTapLocationInfo = new TextPixelOverlay("");
+        mDebugTapLocationInfo.setVisible(false);
+        mDebugTapLocationInfo.setBackgroundColor(0x99000000);
+        mDebugTapLocationInfo.getTextPaint().setFakeBoldText(true);
+        mDebugTapLocationInfo.getTextPaint().setColor(Color.YELLOW);
+        mDebugTapLocationInfo.getTextPaint().setTextSize(Util.dp2px(getApplicationContext(), 12));
+        mMapView.getLayerGroup().add(mDebugTapLocationInfo);
+        mMapView.setTouchDetector(new MapTouchDetector(this, new MapOnTouchGestureListener(mMapView) {
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                MapPoint mapPoint = mMapView.viewPoint2MapPoint(new PointF(e.getX(), e.getY()));
+                mDebugTapLocationInfo.setLocationOnMap(mapPoint.x, mapPoint.y);
+
+                MapPoint lt = mMapView.getTileConfig().getTileLetTopMapPoint(mMapView.mapPoint2Tile(mapPoint, mMapView.getTileDisplayInfo().getLevel()));
+                mMapView.getProjection().lngLat2MapPoint(mMapView.getProjection().getLngLatTransformation().transform(mMapView.getProjection().mapPoint2LngLat(lt)));
+                mDebugTapLocationInfo.setText("Touch:" + mMapView.getProjection().mapPoint2LngLat(mapPoint) + "\n" +
+                        "LeftTop:" + mMapView.getProjection().mapPoint2LngLat(lt) + "\n" +
+                        "Transformed:" + mMapView.getProjection().getLngLatTransformation().transform(mMapView.getProjection().mapPoint2LngLat(lt)) + "\n" +
+                        "LT MapPoint:" + lt);
+                return super.onSingleTapConfirmed(e);
+            }
+        }));
     }
 
     private void showDebug(boolean show) {
