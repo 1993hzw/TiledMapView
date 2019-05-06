@@ -7,6 +7,8 @@
     <string name="marker">标记</string>
     <string name="contour">轮廓图层</string>
 
+    <string name="custom_china">China</string>
+
     <string name="here">你在这!</string>
     <string name="lng_lat_projection">经纬度等间投影</string>
     <string name="web_mercator_projection">Web墨卡托投影</string>

@@ -106,7 +106,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="65dp"
+        android:background="#33000000"
         android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/china"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="80dp"
+            android:text="@string/custom_china"
+            android:textColor="#fff"
+            android:textSize="13dp" />
 
         <CheckBox
             android:id="@+id/tiles"

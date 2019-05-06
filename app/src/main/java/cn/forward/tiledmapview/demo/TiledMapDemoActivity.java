@@ -35,6 +35,7 @@ import cn.forward.tiledmapview.core.ITileLayer;
 import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.LngLat;
 import cn.forward.tiledmapview.core.MapPoint;
+import cn.forward.tiledmapview.demo.china.ChinaTileLayer;
 import cn.forward.tiledmapview.layer.google.GoogleOnlineTileImageSource;
 import cn.forward.tiledmapview.layer.google.GoogleTileLayer;
 import cn.forward.tiledmapview.layer.tianditu.TiandituOnlineTileImageSource;
@@ -73,6 +74,9 @@ public class TiledMapDemoActivity extends FragmentActivity {
 
     private TextPixelOverlay mDebugTapLocationInfo;
 
+    private ChinaTileLayer mChinaTileLayer;
+    private LayerGroup<ITileLayer> mChinaLayerGroup;
+
     @Override
     protected void onCreate(@Nullable Bundle paramBundle) {
         super.onCreate(paramBundle);
@@ -110,6 +114,13 @@ public class TiledMapDemoActivity extends FragmentActivity {
             }
         });
         mMarkerBox.setChecked(mHasMarker);
+        ((CheckBox) findViewById(R.id.china)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mChinaTileLayer.setVisible(isChecked);
+            }
+        });
+
         init(mMapView);
     }
 
@@ -117,6 +128,12 @@ public class TiledMapDemoActivity extends FragmentActivity {
 
         mTileLayerGroup = new LayerGroup<>(); // tile level
         mapView.getLayerGroup().add(mTileLayerGroup);
+
+        mChinaTileLayer = new ChinaTileLayer(mMapView); // China layer
+        mChinaTileLayer.setVisible(false);
+        mChinaLayerGroup = new LayerGroup<>();
+        mChinaLayerGroup.add(mChinaTileLayer);
+        mapView.getLayerGroup().add(mChinaLayerGroup);
 
         initOverlay(mapView); // overlay level
 

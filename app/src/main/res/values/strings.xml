@@ -7,6 +7,8 @@
     <string name="marker">Marker</string>
     <string name="contour">Contour layer</string>
 
+    <string name="custom_china">China</string>
+
     <string name="here">You are here!</string>
     <string name="lng_lat_projection">Longitude latitude projection </string>
     <string name="web_mercator_projection">Web Mercator projection</string>
