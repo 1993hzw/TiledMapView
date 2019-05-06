@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview;
 
 import android.support.annotation.CallSuper;
@@ -42,6 +42,7 @@ public abstract class AbstractLayer implements ILayer {
 
     public void setVisible(boolean visible) {
         this.mIsVisible = visible;
+        refreshItself();
     }
 
     @Override

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.layer;
 
 import android.graphics.Bitmap;
@@ -35,6 +35,15 @@ public class PicassoTileImageLoader implements TileImageCache.ITileImageLoader {
     }
 
     private static WeakHashMap<TileImageCache.ILoaderCallback, Target> sTargets = new WeakHashMap<>();
+    private Picasso.Priority mPriority = Picasso.Priority.NORMAL;
+
+    public PicassoTileImageLoader() {
+        this(Picasso.Priority.NORMAL);
+    }
+
+    public PicassoTileImageLoader(Picasso.Priority priority) {
+        mPriority = priority;
+    }
 
     @Override
     public void request(String uri, String tag, final TileImageCache.ILoaderCallback callback) {
@@ -58,7 +67,7 @@ public class PicassoTileImageLoader implements TileImageCache.ITileImageLoader {
             }
         };
         sTargets.put(callback, target);
-        Picasso.get().load(uri).tag(tag).into(target);
+        Picasso.get().load(uri).tag(tag).priority(mPriority).into(target);
     }
 
     @Override
