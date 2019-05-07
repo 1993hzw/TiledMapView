@@ -36,6 +36,7 @@ import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.LngLat;
 import cn.forward.tiledmapview.core.MapPoint;
 import cn.forward.tiledmapview.demo.china.ChinaTileLayer;
+import cn.forward.tiledmapview.demo.china_lnglat.ChinaTileLayerLnglat;
 import cn.forward.tiledmapview.layer.google.GoogleOnlineTileImageSource;
 import cn.forward.tiledmapview.layer.google.GoogleTileLayer;
 import cn.forward.tiledmapview.layer.tianditu.TiandituOnlineTileImageSource;
@@ -65,7 +66,7 @@ public class TiledMapDemoActivity extends FragmentActivity {
     private LocationListener mLocationListener;
     private boolean mNeedAutoLocation;
     private CheckBox mTilesInfoCheckBox;
-    private CheckBox mDebugBox, mMarkerBox;
+    private CheckBox mDebugBox, mMarkerBox, mChinaBox;
 
     private LayerGroup<ITileLayer> mTileLayerGroup;
     private TiandituOnlineTileImageSource.ImgType mImgType = TiandituOnlineTileImageSource.ImgType.SATELLITE;
@@ -74,7 +75,8 @@ public class TiledMapDemoActivity extends FragmentActivity {
 
     private TextPixelOverlay mDebugTapLocationInfo;
 
-    private ChinaTileLayer mChinaTileLayer;
+    private ChinaTileLayer mChinaTileLayerWm;
+    private ChinaTileLayerLnglat mChinaTileLayerLnglat;
     private LayerGroup<ITileLayer> mChinaLayerGroup;
 
     @Override
@@ -114,10 +116,12 @@ public class TiledMapDemoActivity extends FragmentActivity {
             }
         });
         mMarkerBox.setChecked(mHasMarker);
-        ((CheckBox) findViewById(R.id.china)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        mChinaBox = findViewById(R.id.china);
+        mChinaBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mChinaTileLayer.setVisible(isChecked);
+                showChina(isChecked);
             }
         });
 
@@ -129,10 +133,13 @@ public class TiledMapDemoActivity extends FragmentActivity {
         mTileLayerGroup = new LayerGroup<>(); // tile level
         mapView.getLayerGroup().add(mTileLayerGroup);
 
-        mChinaTileLayer = new ChinaTileLayer(mMapView); // China layer
-        mChinaTileLayer.setVisible(false);
+        mChinaTileLayerWm = new ChinaTileLayer(mMapView); // China layer
+        mChinaTileLayerWm.setVisible(false);
+        mChinaTileLayerLnglat = new ChinaTileLayerLnglat(mMapView);
+        mChinaTileLayerLnglat.setVisible(false);
         mChinaLayerGroup = new LayerGroup<>();
-        mChinaLayerGroup.add(mChinaTileLayer);
+        mChinaLayerGroup.add(mChinaTileLayerWm);
+        mChinaLayerGroup.add(mChinaTileLayerLnglat);
         mapView.getLayerGroup().add(mChinaLayerGroup);
 
         initOverlay(mapView); // overlay level
@@ -230,11 +237,14 @@ public class TiledMapDemoActivity extends FragmentActivity {
                 MapPoint mapPoint = mMapView.viewPoint2MapPoint(new PointF(e.getX(), e.getY()));
                 mDebugTapLocationInfo.setLocationOnMap(mapPoint.x, mapPoint.y);
 
-                MapPoint lt = mMapView.getTileConfig().getTileLetTopMapPoint(mMapView.mapPoint2Tile(mapPoint, mMapView.getTileDisplayInfo().getLevel()));
-                mMapView.getProjection().lngLat2MapPoint(mMapView.getProjection().getLngLatTransformation().transform(mMapView.getProjection().mapPoint2LngLat(lt)));
+                MapPoint lt = mMapView.getTileConfig().getTileLeftTopMapPoint(mMapView.mapPoint2Tile(mapPoint, mMapView.getTileDisplayInfo().getLevel()));
+                LngLat transformed = mMapView.getProjection().mapPoint2LngLat(lt);
+                if (mMapView.getProjection().getLngLatTransformation() != null) {
+                    transformed = mMapView.getProjection().getLngLatTransformation().transform(transformed);
+                }
                 mDebugTapLocationInfo.setText("Touch:" + mMapView.getProjection().mapPoint2LngLat(mapPoint) + "\n" +
                         "LeftTop:" + mMapView.getProjection().mapPoint2LngLat(lt) + "\n" +
-                        "Transformed:" + mMapView.getProjection().getLngLatTransformation().transform(mMapView.getProjection().mapPoint2LngLat(lt)) + "\n" +
+                        "LT Transformed:" + transformed + "\n" +
                         "LT MapPoint:" + lt);
                 return super.onSingleTapConfirmed(e);
             }
@@ -243,6 +253,16 @@ public class TiledMapDemoActivity extends FragmentActivity {
 
     private void showDebug(boolean show) {
         mMapView.setShowTileInfo(show);
+    }
+
+    private void showChina(boolean show) {
+        if (mTileType == TileType.Google || mProjectionType == TiandituOnlineTileImageSource.ProjectionType.WEB_MERCATOR) {
+            mChinaTileLayerWm.setVisible(show);
+            mChinaTileLayerLnglat.setVisible(false);
+        } else {
+            mChinaTileLayerWm.setVisible(false);
+            mChinaTileLayerLnglat.setVisible(show);
+        }
     }
 
     private void updateMap() {
@@ -291,6 +311,7 @@ public class TiledMapDemoActivity extends FragmentActivity {
             }
         }
         showDebug(mTilesInfoCheckBox.isChecked());
+        showChina(mChinaBox.isChecked());
     }
 
     private void addLocation(final ITiledMapView mapView) {

@@ -381,7 +381,7 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
             for (int i = mTileDisplayInfo.getLeftTopRow(); i <= mTileDisplayInfo.getRightBottomRow(); i++) {
                 for (int j = mTileDisplayInfo.getLeftTopCol(); j <= mTileDisplayInfo.getRightBottomCol(); j++) {
                     tile.reset(mTileDisplayInfo.getLevel(), i, j);
-                    PointF topLeftPoint = mapPoint2ViewPoint(mTileConfig.getTileLetTopMapPoint(tile));
+                    PointF topLeftPoint = mapPoint2ViewPoint(mTileConfig.getTileLeftTopMapPoint(tile));
                     canvas.drawRect(topLeftPoint.x, topLeftPoint.y, topLeftPoint.x + imgWidth, topLeftPoint.y + imgHeight, mRectPaint);
                     StaticLayout staticLayout = new StaticLayout("Level=" + tile.level + "\nR=" + tile.row + "\nC=" + tile.col,
                             mTextPaint, (int) imgWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true);

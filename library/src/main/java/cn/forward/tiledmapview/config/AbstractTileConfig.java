@@ -41,7 +41,7 @@ public abstract class AbstractTileConfig implements ITileConfig {
                 -(tile.row + 0.5D) * getResolution(tile.level) * getTileHeight() + getOriginTileMapPoint(tile.level).y);
     }
 
-    public MapPoint getTileLetTopMapPoint(Tile tile) {
+    public MapPoint getTileLeftTopMapPoint(Tile tile) {
         return new MapPoint(tile.col * getResolution(tile.level) * getTileWidth() + getOriginTileMapPoint(tile.level).x,
                 -tile.row * getResolution(tile.level) * getTileHeight() + getOriginTileMapPoint(tile.level).y);
     }

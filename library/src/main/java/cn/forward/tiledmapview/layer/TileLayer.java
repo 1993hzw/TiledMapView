@@ -152,7 +152,7 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
                 continue;
             }
 
-            PointF topLeftPoint = mapView.mapPoint2ViewPoint(tileConfig.getTileLetTopMapPoint(tile));
+            PointF topLeftPoint = mapView.mapPoint2ViewPoint(tileConfig.getTileLeftTopMapPoint(tile));
             mTempRect.set(topLeftPoint.x, topLeftPoint.y, topLeftPoint.x + imgWidth + 0.5F, topLeftPoint.y + imgHeight + 0.5F);
             if (bitmap != null) {
                 canvas.drawBitmap(bitmap, null, mTempRect, null);

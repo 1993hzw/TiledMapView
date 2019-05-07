@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-package cn.forward.tiledmapview.demo.china;
+package cn.forward.tiledmapview.demo.china_lnglat;
 
 import com.squareup.picasso.Picasso;
 
-import cn.forward.tiledmapview.config.WebMercatorTileConfig;
+import cn.forward.tiledmapview.config.LngLatProjectionTileConfig;
 import cn.forward.tiledmapview.core.IProjection;
 import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.layer.PicassoTileImageLoader;
 import cn.forward.tiledmapview.layer.TileImageCache;
 import cn.forward.tiledmapview.layer.TileLayer;
-import cn.forward.tiledmapview.projection.WebMercatorProjection;
-import cn.forward.tiledmapview.projection.Wgs84ToGcj02Transformation;
+import cn.forward.tiledmapview.projection.LngLatProjection;
 
 /**
- * China tiles with Web mercator projection
+ * China tiles with Lng/Lat projection
  *
  * @author ziwei huang
  */
-public class ChinaTileLayer extends TileLayer {
+public class ChinaTileLayerLnglat extends TileLayer {
 
 
-    public ChinaTileLayer(ITiledMapView mapView) {
-        initialize(mapView.getContext(), new TileImageCache(mapView, new ChinaTileImageSource(),
+    public ChinaTileLayerLnglat(ITiledMapView mapView) {
+        initialize(mapView.getContext(), new TileImageCache(mapView, new ChinaTileImageSourceLnglat(),
                 new PicassoTileImageLoader(Picasso.Priority.HIGH)));
 
-        mapView.setTileConfig(new WebMercatorTileConfig(0, 17, 2));
-        IProjection projection = new WebMercatorProjection(new Wgs84ToGcj02Transformation());
+        mapView.setTileConfig(new LngLatProjectionTileConfig(1, 18));
+        IProjection projection = new LngLatProjection();
         mapView.setProjection(projection);
     }
 

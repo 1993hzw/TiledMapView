@@ -52,7 +52,7 @@ public interface ITileConfig {
 
     public MapPoint getTileCenterMapPoint(Tile tile);
 
-    public MapPoint getTileLetTopMapPoint(Tile tile);
+    public MapPoint getTileLeftTopMapPoint(Tile tile);
 
     public void config(ITiledMapView mapView);
 

@@ -25,7 +25,7 @@ import cn.forward.tiledmapview.projection.LngLatProjection;
 
 public class LngLatProjectionTileConfig extends AbstractTileConfig {
 
-    public static double RESOLUTION_OF_LEVEL1 = 0.70312500015485435; // 级别为1时的分辨率
+    public static double RESOLUTION_OF_LEVEL1 = 0.703125; // 级别为1时的分辨率 180/256
 
     private final int mTileImgHeight;
     private final int mTileImgWidth;
