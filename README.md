@@ -2,9 +2,9 @@
 
 [![](https://jitpack.io/v/1993hzw/TiledMapView.svg)](https://jitpack.io/#1993hzw/TiledMapView)
 
-Tiled map loader for Android , supports a variety of projections, including Web Mercator projection, latitude and longitude projection and custom projection; supports locating, adding layers and overlays.
+Tiled map loader for Android, based on the pyramid model, supports a variety of projections, including Web Mercator projection, latitude and longitude projection and custom projection; supports locating, adding layers and overlays.
 
-***Android瓦片地图加载，支持多种投影，包括Web墨卡托投影，经纬度直投及自定义投影等；支持定位，添加图层和覆盖物。***
+***Android瓦片地图加载，基于金字塔模型，支持多种投影，包括Web墨卡托投影，经纬度直投及自定义投影等；支持定位，添加图层和覆盖物。***
 
 ![googlemap](https://raw.githubusercontent.com/1993hzw/common/master/tiledmap/googlemap.gif)
 
