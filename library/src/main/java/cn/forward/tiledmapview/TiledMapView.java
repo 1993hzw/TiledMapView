@@ -27,8 +27,9 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.FrameLayout;
+
+import java.util.Locale;
 
 import cn.forward.tiledmapview.core.ILayer;
 import cn.forward.tiledmapview.core.ILayerGroup;
@@ -44,13 +45,16 @@ import cn.forward.tiledmapview.core.Tile;
 import cn.forward.tiledmapview.util.LogUtil;
 
 /**
+ * Tiled map loader for Android, based on the pyramid model.
+ * Android瓦片地图加载，基于金字塔模型。
+ * <p>
  * https://github.com/1993hzw/TiledMapView
  */
 public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.Callback {
 
     private static boolean sDebugMode = false;
 
-    public static final String TAG = "MapView";
+    public static final String TAG = "TiledMapView";
 
     private IMapTouchDetector mMapTouchDetector;
     private IMapTouchDetector mDefaultMapTouchDetector;
@@ -88,10 +92,9 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
 
     public TiledMapView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         setWillNotDraw(false);
 
-        mLayerGroup = new LayerGroup();
+        mLayerGroup = new LayerGroup<>();
         mLayerGroup.setCallback(this);
 
         mDefaultMapTouchDetector = mMapTouchDetector = new MapTouchDetector(context, new MapOnTouchGestureListener(this));
@@ -486,8 +489,8 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
         Tile tileBottomRight = mapPoint2Tile(new MapPoint(mTempMapRect.right, mTempMapRect.bottom), level);
         int row1 = Math.max(tileTopLeft.row, getTileConfig().getMinTileRowIndex(level));
         int col1 = Math.max(tileTopLeft.col, getTileConfig().getMinTileColIndex(level));
-        int row2 = Math.min(tileBottomRight.row + 1, getTileConfig().getMaxTileRowIndex(level));
-        int col2 = Math.min(tileBottomRight.col + 1, getTileConfig().getMaxTileColIndex(level));
+        int row2 = Math.min(tileBottomRight.row, getTileConfig().getMaxTileRowIndex(level));
+        int col2 = Math.min(tileBottomRight.col, getTileConfig().getMaxTileColIndex(level));
         mTileDisplayInfo.topLeftRow = row1;
         mTileDisplayInfo.topLeftCol = col1;
         mTileDisplayInfo.rightBottomRow = row2;
@@ -495,6 +498,10 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
 
         addFlag(FLAG_ON_DISPLAY_INFO_CHANGED);
         invalidate();
+
+        if (LogUtil.sIsLog) {
+            LogUtil.d(TAG, mTileDisplayInfo.toString());
+        }
     }
 
     private boolean hasFlag(int flag) {
@@ -592,6 +599,12 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
         @Override
         public int getRightBottomCol() {
             return rightBottomCol;
+        }
+
+        @Override
+        public String toString() {
+            return String.format(Locale.getDefault(), "TileDisplayInfo: Level=%d TL=(%d,%d) RB=(%d,%d) Scale=%s",
+                    level, topLeftRow, topLeftCol, rightBottomRow, rightBottomCol, levelScale);
         }
     }
 

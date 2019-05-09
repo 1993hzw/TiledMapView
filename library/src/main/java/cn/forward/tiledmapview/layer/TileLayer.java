@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import cn.forward.tiledmapview.AbstractLayer;
@@ -39,6 +40,8 @@ import cn.forward.tiledmapview.util.LogUtil;
 import cn.forward.tiledmapview.util.ObjectRecycler;
 
 public class TileLayer extends AbstractLayer implements ITileLayer {
+
+    public static final String TAG = "TileLayer";
 
     private ITileImageCache mTileImageCache = null;
     private RectF mTempRect = new RectF();
@@ -88,8 +91,13 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
         int tileColCount = (rightBottomCol - leftTopCol + 1);
         int titleCount = tileRowCount * tileColCount;
         if (tileRowCount <= 0 || tileColCount <= 0) {
-            LogUtil.d("Tile", "titleCount <= 0.");
+            LogUtil.d(TAG, "titleCount <= 0.");
             return;
+        }
+
+        if (LogUtil.sIsLog) {
+            LogUtil.d(TAG, String.format(Locale.getDefault(), "onDisplayInfoChanged: tiles count=%d index=[%d,%d-%d,%d] offsetScreenLimit=%d",
+                    titleCount, leftTopRow, leftTopCol, rightBottomRow, rightBottomCol, getOffscreenTileLimit()));
         }
 
         resizeRecycler(tileRowCount, tileColCount);
@@ -124,7 +132,6 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
                 return d1.compareTo(d2);
             }
         });
-
     }
 
     @Override
@@ -134,7 +141,7 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
         }
 
         if (mTiles == null) {
-            LogUtil.d("Tile", "mTiles is null, Stop drawing.");
+            LogUtil.d(TAG, "mTiles is null, Stop drawing.");
             return;
         }
 

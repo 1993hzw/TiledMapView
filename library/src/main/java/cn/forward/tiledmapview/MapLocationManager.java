@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview;
 
 import android.Manifest;
@@ -63,7 +63,9 @@ public class MapLocationManager {
 
     @SuppressLint("MissingPermission")
     private void switch2networkTemp(final LocationListener listener) {
-        LogUtil.d("MapLocationManager", "switch2networkTemp");
+        if (LogUtil.sIsLog) {
+            LogUtil.d("MapLocationManager", "switch2networkTemp");
+        }
         LocationListener locationListener = new LocationListener() {
             Location innerLastLocation = null;
 
@@ -71,10 +73,14 @@ public class MapLocationManager {
                 if (MapLocationManager.this.isBetterLocation(location, this.innerLastLocation)) {
                     this.innerLastLocation = location;
                     listener.onLocationChanged(this.innerLastLocation);
-                    LogUtil.d("MapLocationManager", "网络定位->经度：" + this.innerLastLocation.getLatitude() + "  纬度：" + this.innerLastLocation.getLongitude());
+                    if (LogUtil.sIsLog) {
+                        LogUtil.d("MapLocationManager", "网络定位->经度：" + this.innerLastLocation.getLatitude() + "  纬度：" + this.innerLastLocation.getLongitude());
+                    }
                     return;
                 }
-                LogUtil.d("MapLocationManager", "网络定位：不更新最新位置");
+                if (LogUtil.sIsLog) {
+                    LogUtil.d("MapLocationManager", "网络定位：不更新最新位置");
+                }
             }
 
             public void onProviderDisabled(String provider) {
@@ -198,19 +204,27 @@ public class MapLocationManager {
                 if (MapLocationManager.this.isBetterLocation(location, this.innerLastLocation)) {
                     this.innerLastLocation = location;
                     listener.onLocationChanged(this.innerLastLocation);
-                    LogUtil.d("MapLocationManager", "gps定位");
+                    if (LogUtil.sIsLog) {
+                        LogUtil.d("MapLocationManager", "gps定位");
+                    }
                     return;
                 }
-                LogUtil.d("MapLocationManager", "gps定位：不更新最新位置");
+                if (LogUtil.sIsLog) {
+                    LogUtil.d("MapLocationManager", "gps定位：不更新最新位置");
+                }
             }
 
             public void onProviderDisabled(String provider) {
-                LogUtil.d("MapLocationManager", "gps关闭");
+                if (LogUtil.sIsLog) {
+                    LogUtil.d("MapLocationManager", "gps关闭");
+                }
                 MapLocationManager.this.switch2networkTemp(listener);
             }
 
             public void onProviderEnabled(String provider) {
-                LogUtil.d("MapLocationManager", "gps打开");
+                if (LogUtil.sIsLog) {
+                    LogUtil.d("MapLocationManager", "gps打开");
+                }
                 MapLocationManager.this.mLocationManager.removeUpdates(mNetworkListenerMap.get(listener));
             }
 

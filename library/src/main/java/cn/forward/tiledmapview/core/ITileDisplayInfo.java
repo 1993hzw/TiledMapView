@@ -13,15 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.core;
 
+/**
+ * 用户可以看到屏幕区域中的瓦片信息
+ * the tiles info in the area of the screen visible to your user
+ */
 public interface ITileDisplayInfo {
 
     public int getLevel();
+
     public float getLevelScale();
+
     public int getLeftTopRow();
+
     public int getLeftTopCol();
+
     public int getRightBottomRow();
+
     public int getRightBottomCol();
 }
