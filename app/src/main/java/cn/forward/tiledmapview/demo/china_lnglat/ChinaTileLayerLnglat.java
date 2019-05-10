@@ -35,7 +35,7 @@ public class ChinaTileLayerLnglat extends TileLayer {
 
 
     public ChinaTileLayerLnglat(ITiledMapView mapView) {
-        initialize(mapView.getContext(), new TileImageCache(mapView, new ChinaTileImageSourceLnglat(),
+        initialize(mapView, new TileImageCache(mapView, new ChinaTileImageSourceLnglat(),
                 new PicassoTileImageLoader(Picasso.Priority.HIGH)));
 
         mapView.setTileConfig(new LngLatProjectionTileConfig(1, 18));

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.core;
 
 import android.graphics.Canvas;
@@ -64,9 +64,9 @@ public interface ILayer {
     public void refreshItself();
 
     public interface Callback {
-        public void refreshItself(ILayer layer);
+        public void refresh(ILayer layer);
+
+        public void onVisibilityChanged(ILayer layer, boolean visible);
     }
 
 }
-
-

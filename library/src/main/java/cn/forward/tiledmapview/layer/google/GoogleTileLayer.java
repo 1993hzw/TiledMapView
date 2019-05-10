@@ -39,7 +39,7 @@ public class GoogleTileLayer extends TileLayer {
 
     public GoogleTileLayer(ITiledMapView mapView, GoogleOnlineTileImageSource.ImgType imgType, float scale, String language, TileImageCache.ITileImageLoader imageLoader) {
         Bitmap placeHolder = BitmapFactory.decodeResource(mapView.getContext().getResources(), cn.forward.tiledmapview.R.drawable.grid);
-        initialize(mapView.getContext(), new TileImageCache(mapView, new GoogleOnlineTileImageSource(imgType, scale, language), imageLoader, placeHolder));
+        initialize(mapView, new TileImageCache(mapView, new GoogleOnlineTileImageSource(imgType, scale, language), imageLoader, placeHolder));
 
         mapView.setTileConfig(new WebMercatorTileConfig(0, 17, scale));
         IProjection projection = new WebMercatorProjection(new Wgs84ToGcj02Transformation()); // 由于tile url有gl=CN参数，故需进行Wgs84ToGcj02Transformation

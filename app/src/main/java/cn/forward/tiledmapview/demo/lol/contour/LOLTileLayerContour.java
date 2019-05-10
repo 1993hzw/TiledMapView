@@ -13,7 +13,7 @@ import cn.forward.tiledmapview.layer.TileLayer;
 public class LOLTileLayerContour extends TileLayer {
 
     public LOLTileLayerContour(ITiledMapView mapView) {
-        initialize(mapView.getContext(), new TileImageCache(mapView, new LOLTileImageSourceContour(),
+        initialize(mapView, new TileImageCache(mapView, new LOLTileImageSourceContour(),
                 new PicassoTileImageLoader()));
 
         // The full image size is 12200x10240, which image level is 6.

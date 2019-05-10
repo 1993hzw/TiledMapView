@@ -25,45 +25,67 @@ import android.support.annotation.NonNull;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import cn.forward.tiledmapview.AbstractLayer;
 import cn.forward.tiledmapview.core.ITileConfig;
-import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.ITileDisplayInfo;
 import cn.forward.tiledmapview.core.ITileImageCache;
 import cn.forward.tiledmapview.core.ITileLayer;
+import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.Tile;
 import cn.forward.tiledmapview.util.LogUtil;
 import cn.forward.tiledmapview.util.ObjectRecycler;
 
-public class TileLayer extends AbstractLayer implements ITileLayer {
+public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCache.ILoaderCallback {
 
     public static final String TAG = "TileLayer";
 
+    private ITiledMapView mTiledMapView;
     private ITileImageCache mTileImageCache = null;
     private RectF mTempRect = new RectF();
-    private ObjectRecycler<Tile> mTilesRecycler;
-    private int mOffscreenTileLimit = 1;
-    private Tile[] mTiles;
+    private ObjectRecycler<TileWithDist> mTilesRecycler;
+    private int mOffscreenTileLimit = 0;
+    private TileWithDist[] mTiles;
+    private Tile mFocusTile;
+
+    // Load in the order of divergence with focus as the center
+    // 以焦点为中心按发散状顺序加载
+    private Comparator<TileWithDist> mTileComparable = new Comparator<TileWithDist>() {
+        public int compare(TileWithDist tile1, TileWithDist tile2) {
+            int d1 = tile1.getDistance();
+            if (tile1.isNoDistance()) {
+                d1 = (tile1.row - mFocusTile.row) * (tile1.row - mFocusTile.row) + (tile1.col - mFocusTile.col) * (tile1.col - mFocusTile.col);
+                tile1.setDistance(d1);
+            }
+            int d2 = tile2.getDistance();
+            if (tile2.isNoDistance()) {
+                d2 = (tile2.row - mFocusTile.row) * (tile2.row - mFocusTile.row) + (tile2.col - mFocusTile.col) * (tile2.col - mFocusTile.col);
+                tile2.setDistance(d2);
+            }
+            return compare(d1, d2);
+        }
+
+        int compare(int x, int y) {
+            return (x < y) ? -1 : ((x == y) ? 0 : 1);
+        }
+    };
 
     public TileLayer() {
     }
 
-    public TileLayer(Context context, ITileImageCache tileImageCache) {
-        initialize(context, tileImageCache);
+    public TileLayer(ITiledMapView mapView, ITileImageCache tileImageCache) {
+        initialize(mapView, tileImageCache);
     }
 
-    protected void initialize(Context context, ITileImageCache tileImageCache) {
+    protected void initialize(ITiledMapView mapView, ITileImageCache tileImageCache) {
+        mTiledMapView = mapView;
         this.mTileImageCache = tileImageCache;
-        this.mTileImageCache.setTileLayer(this);
 
-        mTilesRecycler = new ObjectRecycler<>(new ObjectRecycler.ObjectGenerator<Tile>() {
+        mTilesRecycler = new ObjectRecycler<>(new ObjectRecycler.ObjectGenerator<TileWithDist>() {
             @Override
-            public Tile generate() {
-                return new Tile();
+            public TileWithDist generate() {
+                return new TileWithDist();
             }
         });
     }
@@ -102,7 +124,7 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
 
         resizeRecycler(tileRowCount, tileColCount);
 
-        mTiles = new Tile[titleCount];
+        mTiles = new TileWithDist[titleCount];
 
         int tileId = 0;
         for (int i = leftTopRow; i <= rightBottomRow; i++) {
@@ -113,25 +135,12 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
             }
         }
 
-        // 以焦点为中心按发散状顺序加载
-        Arrays.sort(mTiles, new Comparator<Tile>() {
-            Map<Tile, Integer> distMap = new HashMap<>();
-            Tile focusTile = tileConfig.mapPoint2Tile(mapView.getFocusCenter(), tileDisplayInfo.getLevel());
+        mFocusTile = tileConfig.mapPoint2Tile(mapView.getFocusCenter(), tileDisplayInfo.getLevel());
+        Arrays.sort(mTiles, mTileComparable);
 
-            public int compare(Tile tile1, Tile tile2) {
-                Integer d1 = distMap.get(tile1);
-                if (d1 == null) {
-                    d1 = (tile1.row - focusTile.row) * (tile1.row - focusTile.row) + (tile1.col - focusTile.col) * (tile1.col - focusTile.col);
-                    distMap.put(tile1, d1);
-                }
-                Integer d2 = distMap.get(tile2);
-                if (d2 == null) {
-                    d2 = (tile2.row - focusTile.row) * (tile2.row - focusTile.row) + (tile2.col - focusTile.col) * (tile2.col - focusTile.col);
-                    distMap.put(tile2, d2);
-                }
-                return d1.compareTo(d2);
-            }
-        });
+        for (int i = 0; i < mTiles.length; i++) { // request bitmap
+            getTileImageCache().requestTileBitmap(mapView, mTiles[i], this);
+        }
     }
 
     @Override
@@ -151,7 +160,7 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
 
         for (int i = 0; i < mTiles.length; i++) {
             Tile tile = mTiles[i];
-            Bitmap bitmap = getTileImageCache().getTileBitmap(tile, mapView); // load bitmap first
+            // is visible to user?
             if (tile.row < tileDisplayInfo.getLeftTopRow() || tile.row > tileDisplayInfo.getRightBottomRow()) { // skip drawing
                 continue;
             }
@@ -159,12 +168,13 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
                 continue;
             }
 
+            Bitmap bitmap = getTileImageCache().getTileBitmap(mapView, tile);
             PointF topLeftPoint = mapView.mapPoint2ViewPoint(tileConfig.getTileLeftTopMapPoint(tile));
             mTempRect.set(topLeftPoint.x, topLeftPoint.y, topLeftPoint.x + imgWidth + 0.5F, topLeftPoint.y + imgHeight + 0.5F);
             if (bitmap != null) {
                 canvas.drawBitmap(bitmap, null, mTempRect, null);
-            } else if (getTileImageCache().getPlaceHolder(tile, mapView) != null) {
-                canvas.drawBitmap(getTileImageCache().getPlaceHolder(tile, mapView), null, mTempRect, null);
+            } else if (getTileImageCache().getPlaceHolder() != null) {
+                canvas.drawBitmap(getTileImageCache().getPlaceHolder(), null, mTempRect, null);
             }
         }
     }
@@ -202,6 +212,37 @@ public class TileLayer extends AbstractLayer implements ITileLayer {
         }
     }
 
+    @Override
+    public void onLoaded(Bitmap bitmap) {
+        mTiledMapView.refresh();
+    }
+
+    @Override
+    public void onFailed(int reason) {
+
+    }
+
+    private static class TileWithDist extends Tile {
+        private int mDistance = Integer.MAX_VALUE;
+
+        public void setDistance(int distance) {
+            mDistance = distance;
+        }
+
+        public int getDistance() {
+            return mDistance;
+        }
+
+        @Override
+        public void reset(int level, int row, int col) {
+            super.reset(level, row, col);
+            mDistance = Integer.MAX_VALUE;
+        }
+
+        public boolean isNoDistance() {
+            return mDistance == Integer.MAX_VALUE;
+        }
+    }
 }
 
 

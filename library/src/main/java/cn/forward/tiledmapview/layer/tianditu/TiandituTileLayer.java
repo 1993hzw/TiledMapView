@@ -54,7 +54,7 @@ public class TiandituTileLayer extends TileLayer {
                              TileImageCache.ITileImageLoader tileImageLoader) {
         Bitmap placeHolder = BitmapFactory.decodeResource(mapView.getContext().getResources(), cn.forward.tiledmapview.R.drawable.grid);
         ITileImageCache imageCache = new TileImageCache(mapView, new TiandituOnlineTileImageSource(imgType, projectionType, key), tileImageLoader, placeHolder);
-        initialize(mapView.getContext(), imageCache);
+        initialize(mapView, imageCache);
 
         if (projectionType == TiandituOnlineTileImageSource.ProjectionType.LNG_LAT) {
             mapView.setTileConfig(new LngLatProjectionTileConfig(1, 18));

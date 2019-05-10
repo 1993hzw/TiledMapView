@@ -36,7 +36,7 @@ public class ChinaTileLayer extends TileLayer {
 
 
     public ChinaTileLayer(ITiledMapView mapView) {
-        initialize(mapView.getContext(), new TileImageCache(mapView, new ChinaTileImageSource(),
+        initialize(mapView, new TileImageCache(mapView, new ChinaTileImageSource(),
                 new PicassoTileImageLoader(Picasso.Priority.HIGH)));
 
         mapView.setTileConfig(new WebMercatorTileConfig(0, 17, 2));

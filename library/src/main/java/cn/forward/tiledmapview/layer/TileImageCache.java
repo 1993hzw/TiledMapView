@@ -51,7 +51,7 @@ public class TileImageCache implements ITileImageCache {
         mTileImagesRecycler = new ObjectRecycler<>(new ObjectRecycler.ObjectGenerator<TileImage>() {
             @Override
             public TileImage generate() {
-                return new TileImage(mapView, mImageLoader);
+                return new TileImage(mImageLoader);
             }
         });
 
@@ -69,7 +69,7 @@ public class TileImageCache implements ITileImageCache {
     }
 
     @Override
-    public Bitmap getPlaceHolder(Tile tile, ITiledMapView mapView) {
+    public Bitmap getPlaceHolder() {
         return mPlaceHolder;
     }
 
@@ -79,58 +79,49 @@ public class TileImageCache implements ITileImageCache {
     }
 
     @Override
-    public Bitmap getTileBitmap(Tile tile, ITiledMapView mapView) {
+    public Bitmap getTileBitmap(ITiledMapView mapView, Tile tile) {
         TileImage tileImage = getTileImage(tile);
-        Bitmap bitmap = tileImage.requestTile(mTileImageSource.getUri(tile));
+        Bitmap bitmap = tileImage.getTile(mTileImageSource.getUri(tile));
         return bitmap;
+    }
+
+    @Override
+    public void requestTileBitmap(ITiledMapView mapView, Tile tile, ILoaderCallback callback) {
+        TileImage tileImage = getTileImage(tile);
+        tileImage.requestTile(mTileImageSource.getUri(tile), callback);
     }
 
     private TileImage getTileImage(Tile tile) {
         return mTileImagesRecycler.get(tile.row, tile.col);
     }
 
+    @Override
     public void clear() {
         mImageLoader.cancelByTag(mImageLoader.toString());
     }
 
-    public ITiledMapView getMapView() {
-        return this.mMapView;
-    }
-
+    @Override
     public ITileImageSource getTileImageSource() {
         return this.mTileImageSource;
     }
 
-    public ITileLayer getTileLayer() {
-        return this.mTileLayer;
-    }
-
-    public void setMapView(ITiledMapView mapView) {
-        this.mMapView = mapView;
-    }
-
+    @Override
     public void setTileImageSource(ITileImageSource tileImageSource) {
         this.mTileImageSource = tileImageSource;
     }
 
-    public void setTileLayer(ITileLayer tileLayer) {
-        this.mTileLayer = tileLayer;
-    }
-
     private static class TileImage implements ILoaderCallback {
-        private ITiledMapView mMapView;
-        private ITileImageLoader mImageLoader;
+        private final ITileImageLoader mImageLoader;
         private InnerCallback mTarget;
         private Bitmap mBitmap;
         private String mUri;
+        private ILoaderCallback mLoaderCallback;
 
-        public TileImage(ITiledMapView mapView, ITileImageLoader imageLoader) {
-            mMapView = mapView;
+        public TileImage(ITileImageLoader imageLoader) {
             mImageLoader = imageLoader;
         }
 
-        public Bitmap requestTile(String uri) {
-            ITileImageLoader oldImageLoader = mImageLoader;
+        public Bitmap getTile(String uri) {
             String oldTag = mUri;
             mUri = uri;
             if (mUri.equals(oldTag)) {
@@ -144,14 +135,27 @@ public class TileImageCache implements ITileImageCache {
             }
 
             mBitmap = null;
+            return null;
+        }
+
+        public void requestTile(String uri, ILoaderCallback callback) {
+            mLoaderCallback = null;
+            Bitmap bitmap = getTile(uri);
+            if (bitmap != null) { // loaded
+                if (callback != null) {
+                    callback.onLoaded(bitmap);
+                }
+                return;
+            }
+
+            mLoaderCallback = callback;
+
             if (mTarget != null) { // cancel last doRequest
                 mTarget.isLoading = false;
-                oldImageLoader.cancel(mTarget);
+                mImageLoader.cancel(mTarget);
             }
             mTarget = new InnerCallback(this);
             mImageLoader.request(mUri, mImageLoader.toString(), mTarget);
-
-            return mBitmap;
         }
 
         public String getUri() {
@@ -161,12 +165,18 @@ public class TileImageCache implements ITileImageCache {
         @Override
         public void onLoaded(Bitmap bitmap) {
             mBitmap = bitmap;
-            mMapView.refresh();
+            if (mLoaderCallback != null) {
+                mLoaderCallback.onLoaded(bitmap);
+                mLoaderCallback = null;
+            }
         }
 
         @Override
         public void onFailed(int reason) {
-
+            if (mLoaderCallback != null) {
+                mLoaderCallback.onFailed(reason);
+                mLoaderCallback = null;
+            }
         }
     }
 
@@ -216,11 +226,6 @@ public class TileImageCache implements ITileImageCache {
         void cancelByTag(String tag);
     }
 
-    public interface ILoaderCallback {
-        void onLoaded(Bitmap bitmap);
-
-        void onFailed(int reason);
-    }
 }
 
 

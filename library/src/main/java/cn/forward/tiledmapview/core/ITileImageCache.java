@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.core;
 
 import android.graphics.Bitmap;
@@ -25,25 +25,25 @@ public interface ITileImageCache {
 
     public void setPlaceHolder(Bitmap placeHolder);
 
-    public Bitmap getPlaceHolder(Tile tile, ITiledMapView mapView);
+    public Bitmap getPlaceHolder();
 
     public void resize(int rowCount, int colCount);
 
-    public Bitmap getTileBitmap(Tile tile, ITiledMapView mapView);
+    public Bitmap getTileBitmap(ITiledMapView mapView, Tile tile);
+
+    public void requestTileBitmap(ITiledMapView mapView, Tile tile, ILoaderCallback callback);
 
     public void clear();
 
-    public ITiledMapView getMapView();
-
     public ITileImageSource getTileImageSource();
-
-    public ITileLayer getTileLayer();
-
-    public void setMapView(ITiledMapView mapView);
 
     public void setTileImageSource(ITileImageSource tileImageSource);
 
-    public void setTileLayer(ITileLayer tileLayer);
+    public interface ILoaderCallback {
+        void onLoaded(Bitmap bitmap);
+
+        void onFailed(int reason);
+    }
 }
 
 

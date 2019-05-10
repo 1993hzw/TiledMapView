@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview;
 
 import android.graphics.Canvas;
@@ -103,14 +103,18 @@ public class LayerGroup<T extends ILayer> extends AbstractLayer implements ILaye
     public void onProjectionChanged(ITiledMapView mapView, IProjection currentProjection, IProjection oldProjection) {
         super.onProjectionChanged(mapView, currentProjection, oldProjection);
         for (int i = 0; i < size(); i++) {
-            get(i).onProjectionChanged(mapView, currentProjection, oldProjection);
+            if (get(i).isVisible()) {
+                get(i).onProjectionChanged(mapView, currentProjection, oldProjection);
+            }
         }
     }
 
     @Override
     public void onDisplayInfoChanged(@NonNull ITiledMapView mapView, @NonNull ITileConfig tileConfig, @NonNull ITileDisplayInfo tileDisplayInfo) {
         for (int i = 0; i < size(); i++) {
-            get(i).onDisplayInfoChanged(mapView, tileConfig, tileDisplayInfo);
+            if (get(i).isVisible()) {
+                get(i).onDisplayInfoChanged(mapView, tileConfig, tileDisplayInfo);
+            }
         }
     }
 

@@ -17,7 +17,7 @@ public class LOLTileLayer extends TileLayer {
 
     public LOLTileLayer(ITiledMapView mapView) {
         Bitmap placeHolder = BitmapFactory.decodeResource(mapView.getContext().getResources(), cn.forward.tiledmapview.R.drawable.grid);
-        initialize(mapView.getContext(), new TileImageCache(mapView, new LOLTileImageSource(),
+        initialize(mapView, new TileImageCache(mapView, new LOLTileImageSource(),
                 new PicassoTileImageLoader(), placeHolder));
 
         // The full image size is 12200x10240, which image level is 6.

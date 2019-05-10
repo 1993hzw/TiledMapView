@@ -42,6 +42,10 @@ public abstract class AbstractLayer implements ILayer {
 
     public void setVisible(boolean visible) {
         this.mIsVisible = visible;
+        Callback callback = getCallback();
+        if (callback != null) {
+            callback.onVisibilityChanged(this, mIsVisible);
+        }
         refreshItself();
     }
 
@@ -124,7 +128,7 @@ public abstract class AbstractLayer implements ILayer {
     public void refreshItself() {
         Callback callback = getCallback();
         if (callback != null) {
-            callback.refreshItself(this);
+            callback.refresh(this);
         }
     }
 

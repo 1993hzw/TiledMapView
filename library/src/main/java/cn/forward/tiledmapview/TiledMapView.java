@@ -67,6 +67,7 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
     private MapRect mMapRect = new MapRect();
     private MapRect mCenterBounds = new MapRect();
     private IProjection mProjection;
+    private IProjection mOldProjection;
 
     private final InnerTileDisplayInfo mTileDisplayInfo = new InnerTileDisplayInfo();
     private boolean mIsShowTileInfo = false; // 是否显示网格信息
@@ -266,9 +267,9 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
 
     @Override
     public void setProjection(IProjection projection) {
-        IProjection old = mProjection;
+        mOldProjection = mProjection;
         mProjection = projection;
-        mLayerGroup.onProjectionChanged(this, mProjection, old);
+        mLayerGroup.onProjectionChanged(this, mProjection, mOldProjection);
     }
 
     @Override
@@ -368,7 +369,9 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
 
         if (hasFlag(FLAG_ON_DISPLAY_INFO_CHANGED)) {
             clearFlag(FLAG_ON_DISPLAY_INFO_CHANGED);
-            mLayerGroup.onDisplayInfoChanged(this, mTileConfig, mTileDisplayInfo);
+            if (mLayerGroup.isVisible()) {
+                mLayerGroup.onDisplayInfoChanged(this, mTileConfig, mTileDisplayInfo);
+            }
         }
 
         if (mLayerGroup.isVisible()) {
@@ -414,6 +417,12 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
             PointF pointF = mapPoint2ViewPoint(new MapPoint(mMapRect.left, mMapRect.top));
             PointF pointF2 = mapPoint2ViewPoint(new MapPoint(mMapRect.right, mMapRect.bottom));
             canvas.drawRect(pointF.x, pointF.y, pointF2.x, pointF2.y, mPaintDebug);
+
+            mPaintDebug.setStyle(Paint.Style.STROKE);
+            mPaintDebug.setColor(Color.YELLOW);
+            mPaintDebug.setTextSize(28);
+            mPaintDebug.setStrokeWidth(1);
+            canvas.drawText(mTileDisplayInfo.toString(), 0, getHeight() / 5, mPaintDebug);
         }
     }
 
@@ -559,8 +568,16 @@ public class TiledMapView extends FrameLayout implements ITiledMapView, ILayer.C
     }
 
     @Override
-    public void refreshItself(ILayer layer) {
+    public void refresh(ILayer layer) {
         refresh();
+    }
+
+    @Override
+    public void onVisibilityChanged(ILayer layer, boolean visible) {
+        if (visible) {
+            layer.onProjectionChanged(this, getProjection(), mOldProjection);
+            layer.onDisplayInfoChanged(this, getTileConfig(), getTileDisplayInfo());
+        }
     }
 
     private static class InnerTileDisplayInfo implements ITileDisplayInfo {
