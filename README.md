@@ -23,7 +23,7 @@ allprojects {
 }
  
 dependencies {
-    compile 'com.github.1993hzw:TiledMapView:1.1.1'
+    compile 'com.github.1993hzw:TiledMapView:1.2'
 }
 ```
 
