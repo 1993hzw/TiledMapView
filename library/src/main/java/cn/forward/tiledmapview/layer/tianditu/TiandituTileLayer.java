@@ -24,6 +24,7 @@ import cn.forward.tiledmapview.config.WebMercatorTileConfig;
 import cn.forward.tiledmapview.core.IProjection;
 import cn.forward.tiledmapview.core.ITileImageCache;
 import cn.forward.tiledmapview.core.ITiledMapView;
+import cn.forward.tiledmapview.layer.GlideTileImageLoader;
 import cn.forward.tiledmapview.layer.PicassoTileImageLoader;
 import cn.forward.tiledmapview.layer.TileImageCache;
 import cn.forward.tiledmapview.layer.TileLayer;
@@ -38,7 +39,7 @@ public class TiandituTileLayer extends TileLayer {
     public TiandituTileLayer(ITiledMapView mapView, TiandituOnlineTileImageSource.ImgType imgType,
                              TiandituOnlineTileImageSource.ProjectionType projectionType,
                              String key) {
-        this(mapView, imgType, projectionType, key, new PicassoTileImageLoader());
+        this(mapView, imgType, projectionType, key, new GlideTileImageLoader(mapView.getContext()));
     }
 
     /**

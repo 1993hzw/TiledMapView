@@ -16,11 +16,12 @@
 
 package cn.forward.tiledmapview.demo.china;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Priority;
 
 import cn.forward.tiledmapview.config.WebMercatorTileConfig;
 import cn.forward.tiledmapview.core.IProjection;
 import cn.forward.tiledmapview.core.ITiledMapView;
+import cn.forward.tiledmapview.layer.GlideTileImageLoader;
 import cn.forward.tiledmapview.layer.PicassoTileImageLoader;
 import cn.forward.tiledmapview.layer.TileImageCache;
 import cn.forward.tiledmapview.layer.TileLayer;
@@ -37,7 +38,7 @@ public class ChinaTileLayer extends TileLayer {
 
     public ChinaTileLayer(ITiledMapView mapView) {
         initialize(mapView, new TileImageCache(mapView, new ChinaTileImageSource(),
-                new PicassoTileImageLoader(Picasso.Priority.HIGH)));
+                new GlideTileImageLoader(mapView.getContext(), Priority.HIGH)));
 
         mapView.setTileConfig(new WebMercatorTileConfig(0, 17, 2));
         IProjection projection = new WebMercatorProjection(new Wgs84ToGcj02Transformation());

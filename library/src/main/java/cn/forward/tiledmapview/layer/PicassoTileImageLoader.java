@@ -24,6 +24,7 @@ import com.squareup.picasso.Target;
 
 import java.util.WeakHashMap;
 
+import cn.forward.tiledmapview.core.ITileConfig;
 import cn.forward.tiledmapview.util.LogUtil;
 
 public class PicassoTileImageLoader implements TileImageCache.ITileImageLoader {
@@ -46,7 +47,7 @@ public class PicassoTileImageLoader implements TileImageCache.ITileImageLoader {
     }
 
     @Override
-    public void request(String uri, String tag, final TileImageCache.ILoaderCallback callback) {
+    public void request(ITileConfig tileConfig, String uri, String tag, final TileImageCache.ILoaderCallback callback) {
         Target target = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -60,7 +61,7 @@ public class PicassoTileImageLoader implements TileImageCache.ITileImageLoader {
                     LogUtil.e(TAG, "onBitmapFailed:" + e.getMessage());
                 }
                 sTargets.remove(callback);
-                callback.onFailed(0);
+                callback.onFailed("onBitmapFailed");
             }
 
             @Override

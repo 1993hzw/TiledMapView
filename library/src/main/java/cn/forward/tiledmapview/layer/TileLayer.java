@@ -47,6 +47,7 @@ public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCa
     private int mOffscreenTileLimit = 0;
     private OptimizedTile[] mTiles;
     private Tile mFocusTile;
+    private InnerTileDisplayInfo mLastTileDisplayInfo = new InnerTileDisplayInfo();
 
     // Load in the order of divergence with focus as the center
     // 以焦点为中心按发散状顺序加载
@@ -99,9 +100,13 @@ public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCa
         this.mTileImageCache.clear();
     }
 
-
     @Override
     public void onDisplayInfoChanged(@NonNull final ITiledMapView mapView, @NonNull final ITileConfig tileConfig, @NonNull final ITileDisplayInfo tileDisplayInfo) {
+        if (mLastTileDisplayInfo.isSame(tileDisplayInfo)) {
+            return;
+        }
+
+        mLastTileDisplayInfo.set(tileDisplayInfo);
 
         int leftTopRow = Math.max(tileConfig.getMinTileRowIndex(tileDisplayInfo.getLevel()), tileDisplayInfo.getLeftTopRow() - mOffscreenTileLimit);
         int leftTopCol = Math.max(tileConfig.getMinTileColIndex(tileDisplayInfo.getLevel()), tileDisplayInfo.getLeftTopCol() - mOffscreenTileLimit);
@@ -217,8 +222,70 @@ public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCa
     }
 
     @Override
-    public void onFailed(int reason) {
+    public void onFailed(String msg) {
 
+    }
+
+    private static class InnerTileDisplayInfo implements ITileDisplayInfo {
+        int level = Integer.MIN_VALUE;
+        float levelScale;
+        int leftTopRow;
+        int leftTopCol;
+        int rightBottomRow;
+        int rightBottomCol;
+
+        public void set(ITileDisplayInfo tileDisplayInfo) {
+            this.level = tileDisplayInfo.getLevel();
+            this.levelScale = tileDisplayInfo.getLevelScale();
+            this.leftTopRow = tileDisplayInfo.getLeftTopRow();
+            this.leftTopCol = tileDisplayInfo.getLeftTopCol();
+            this.rightBottomRow = tileDisplayInfo.getRightBottomRow();
+            this.rightBottomCol = tileDisplayInfo.getRightBottomCol();
+        }
+
+        public boolean isSame(ITileDisplayInfo tileDisplayInfo) {
+            return level == tileDisplayInfo.getLevel()
+                    && leftTopRow == tileDisplayInfo.getLeftTopRow()
+                    && leftTopCol == tileDisplayInfo.getLeftTopCol()
+                    && rightBottomRow == tileDisplayInfo.getRightBottomRow()
+                    && rightBottomCol == tileDisplayInfo.getRightBottomCol();
+        }
+
+        @Override
+        public int getLevel() {
+            return level;
+        }
+
+        @Override
+        public float getLevelScale() {
+            return levelScale;
+        }
+
+        @Override
+        public int getLeftTopRow() {
+            return leftTopRow;
+        }
+
+        @Override
+        public int getLeftTopCol() {
+            return leftTopCol;
+        }
+
+        @Override
+        public int getRightBottomRow() {
+            return rightBottomRow;
+        }
+
+        @Override
+        public int getRightBottomCol() {
+            return rightBottomCol;
+        }
+
+        @Override
+        public String toString() {
+            return String.format(Locale.getDefault(), "TileDisplayInfo: Level=%d TL=(%d,%d) RB=(%d,%d) Scale=%s",
+                    level, leftTopRow, leftTopCol, rightBottomRow, rightBottomCol, levelScale);
+        }
     }
 }
 

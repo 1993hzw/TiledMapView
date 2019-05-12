@@ -42,7 +42,7 @@ public interface ITileImageCache {
     public interface ILoaderCallback {
         void onLoaded(Bitmap bitmap);
 
-        void onFailed(int reason);
+        void onFailed(String msg);
     }
 }
 

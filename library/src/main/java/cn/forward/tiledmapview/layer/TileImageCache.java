@@ -18,10 +18,10 @@ package cn.forward.tiledmapview.layer;
 
 import android.graphics.Bitmap;
 
+import cn.forward.tiledmapview.core.ITileConfig;
 import cn.forward.tiledmapview.core.ITileDisplayInfo;
 import cn.forward.tiledmapview.core.ITileImageCache;
 import cn.forward.tiledmapview.core.ITileImageSource;
-import cn.forward.tiledmapview.core.ITileLayer;
 import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.Tile;
 import cn.forward.tiledmapview.util.LogUtil;
@@ -37,7 +37,7 @@ public class TileImageCache implements ITileImageCache {
     private Bitmap mPlaceHolder;
 
     public TileImageCache(final ITiledMapView mapView, ITileImageSource tileImageSource) {
-        this(mapView, tileImageSource, new PicassoTileImageLoader());
+        this(mapView, tileImageSource, new GlideTileImageLoader(mapView.getContext()));
     }
 
     public TileImageCache(final ITiledMapView mapView, ITileImageSource tileImageSource, ITileImageLoader imageLoader) {
@@ -103,7 +103,7 @@ public class TileImageCache implements ITileImageCache {
         if (uri == null) {
             uri = mTileImageSource.getUri(tile);
         }
-        tileImage.requestTile(uri, callback);
+        tileImage.requestTile(mapView.getTileConfig(), uri, callback);
     }
 
     private TileImage getTileImage(Tile tile) {
@@ -147,7 +147,7 @@ public class TileImageCache implements ITileImageCache {
             return null;
         }
 
-        public void requestTile(String uri, ILoaderCallback callback) {
+        public void requestTile(ITileConfig tileConfig, String uri, ILoaderCallback callback) {
             Bitmap bitmap = getTile(uri);
             if (bitmap != null) { // loaded
                 if (callback != null) {
@@ -175,7 +175,7 @@ public class TileImageCache implements ITileImageCache {
             if (LogUtil.sIsLog) {
                 LogUtil.d(TAG, "request:" + mUri);
             }
-            mImageLoader.request(mUri, mImageLoader.toString(), mTarget);
+            mImageLoader.request(tileConfig, mUri, mImageLoader.toString(), mTarget);
         }
 
         public String getUri() {
@@ -192,9 +192,9 @@ public class TileImageCache implements ITileImageCache {
         }
 
         @Override
-        public void onFailed(int reason) {
+        public void onFailed(String msg) {
             if (mLoaderCallback != null) {
-                mLoaderCallback.onFailed(reason);
+                mLoaderCallback.onFailed(msg);
                 mLoaderCallback = null;
             }
         }
@@ -228,18 +228,18 @@ public class TileImageCache implements ITileImageCache {
         }
 
         @Override
-        public void onFailed(int reason) {
+        public void onFailed(String msg) {
             isLoading = false;
             if (!isValid()) {
                 return;
             }
-            mTileImage.onFailed(reason);
+            mTileImage.onFailed(msg);
         }
 
     }
 
     public interface ITileImageLoader {
-        void request(String uri, String tag, ILoaderCallback callback);
+        void request(ITileConfig tileConfig, String uri, String tag, ILoaderCallback callback);
 
         void cancel(ILoaderCallback callback);
 

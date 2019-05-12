@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import cn.forward.tiledmapview.config.ImageInfo;
 import cn.forward.tiledmapview.config.ImageTileConfig;
 import cn.forward.tiledmapview.core.ITiledMapView;
+import cn.forward.tiledmapview.layer.GlideTileImageLoader;
 import cn.forward.tiledmapview.layer.PicassoTileImageLoader;
 import cn.forward.tiledmapview.layer.TileImageCache;
 import cn.forward.tiledmapview.layer.TileLayer;
@@ -18,7 +19,7 @@ public class LOLTileLayer extends TileLayer {
     public LOLTileLayer(ITiledMapView mapView) {
         Bitmap placeHolder = BitmapFactory.decodeResource(mapView.getContext().getResources(), cn.forward.tiledmapview.R.drawable.grid);
         initialize(mapView, new TileImageCache(mapView, new LOLTileImageSource(),
-                new PicassoTileImageLoader(), placeHolder));
+                new GlideTileImageLoader(mapView.getContext()), placeHolder));
 
         // The full image size is 12200x10240, which image level is 6.
         mapView.setTileConfig(new ImageTileConfig(new ImageInfo(12200, 10240), 0, 6));

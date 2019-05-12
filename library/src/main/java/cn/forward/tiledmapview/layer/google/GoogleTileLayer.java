@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import cn.forward.tiledmapview.config.WebMercatorTileConfig;
 import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.IProjection;
+import cn.forward.tiledmapview.layer.GlideTileImageLoader;
 import cn.forward.tiledmapview.layer.PicassoTileImageLoader;
 import cn.forward.tiledmapview.layer.TileImageCache;
 import cn.forward.tiledmapview.layer.TileLayer;
@@ -34,7 +35,7 @@ import cn.forward.tiledmapview.projection.Wgs84ToGcj02Transformation;
 public class GoogleTileLayer extends TileLayer {
 
     public GoogleTileLayer(ITiledMapView mapView, GoogleOnlineTileImageSource.ImgType imgType) {
-        this(mapView, imgType, 2f, "zh-CN", new PicassoTileImageLoader());
+        this(mapView, imgType, 2f, "zh-CN", new GlideTileImageLoader(mapView.getContext()));
     }
 
     public GoogleTileLayer(ITiledMapView mapView, GoogleOnlineTileImageSource.ImgType imgType, float scale, String language, TileImageCache.ITileImageLoader imageLoader) {

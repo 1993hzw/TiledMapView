@@ -20,8 +20,9 @@ public class MyApp extends Application {
 
         TiledMapView.openLog(BuildConfig.DEBUG);
 
-        Picasso picasso = new Picasso.Builder(this).memoryCache(
-                new LruCache(calculateMemoryCacheSize(this))).build();
+        Picasso picasso = new Picasso.Builder(this)
+                .memoryCache(new LruCache(calculateMemoryCacheSize(this)))
+                .build();
         Picasso.setSingletonInstance(picasso);
     }
 
