@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package cn.forward.tiledmapview.util;
 
-public class ObjectRecycler<T> {
+import cn.forward.tiledmapview.core.ITileDisplayInfo;
+
+public class TileObjectRecycler<T> {
 
     private ObjectGenerator<T> mGenerator;
     private int mMaxRowCount, mMaxColCount;
     private T[][] mObjects;
 
-    public ObjectRecycler(ObjectGenerator<T> generator) {
+    public TileObjectRecycler(ObjectGenerator<T> generator) {
         mGenerator = generator;
     }
 
-    public void resize(int rowCount, int colCount) {
+    public void resize(ITileDisplayInfo tileDisplayInfo, int rowCount, int colCount) {
         T[][] old = mObjects;
         boolean needResize = false;
         if (mMaxRowCount < rowCount) {
@@ -53,8 +55,7 @@ public class ObjectRecycler<T> {
         }
     }
 
-
-    public T get(int row, int col) {
+    public T get(int level, int row, int col) {
         return mObjects[row % mObjects.length][col % mObjects[0].length];
     }
 

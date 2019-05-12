@@ -18,12 +18,14 @@ package cn.forward.tiledmapview.layer;
 
 import android.graphics.Bitmap;
 
+import cn.forward.tiledmapview.core.ITileDisplayInfo;
 import cn.forward.tiledmapview.core.ITileImageCache;
 import cn.forward.tiledmapview.core.ITileImageSource;
 import cn.forward.tiledmapview.core.ITileLayer;
 import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.Tile;
-import cn.forward.tiledmapview.util.ObjectRecycler;
+import cn.forward.tiledmapview.util.LogUtil;
+import cn.forward.tiledmapview.util.TileObjectRecycler;
 
 public class TileImageCache implements ITileImageCache {
     public static final String TAG = "TileImageCache";
@@ -31,8 +33,7 @@ public class TileImageCache implements ITileImageCache {
     private ITiledMapView mMapView;
     private ITileImageSource mTileImageSource = null;
     private ITileImageLoader mImageLoader;
-    private ITileLayer mTileLayer;
-    private ObjectRecycler<TileImage> mTileImagesRecycler;
+    private TileObjectRecycler<TileImage> mTileImagesRecycler;
     private Bitmap mPlaceHolder;
 
     public TileImageCache(final ITiledMapView mapView, ITileImageSource tileImageSource) {
@@ -48,7 +49,7 @@ public class TileImageCache implements ITileImageCache {
         this.mMapView = mapView;
         mImageLoader = imageLoader;
 
-        mTileImagesRecycler = new ObjectRecycler<>(new ObjectRecycler.ObjectGenerator<TileImage>() {
+        mTileImagesRecycler = new TileObjectRecycler<>(new TileObjectRecycler.ObjectGenerator<TileImage>() {
             @Override
             public TileImage generate() {
                 return new TileImage(mImageLoader);
@@ -74,8 +75,8 @@ public class TileImageCache implements ITileImageCache {
     }
 
     @Override
-    public void resize(int rowCount, int colCount) {
-        mTileImagesRecycler.resize(rowCount, colCount);
+    public void resize(ITileDisplayInfo tileDisplayInfo, int rowCount, int colCount) {
+        mTileImagesRecycler.resize(tileDisplayInfo, rowCount, colCount);
     }
 
     @Override
@@ -106,7 +107,7 @@ public class TileImageCache implements ITileImageCache {
     }
 
     private TileImage getTileImage(Tile tile) {
-        return mTileImagesRecycler.get(tile.row, tile.col);
+        return mTileImagesRecycler.get(tile.level, tile.row, tile.col);
     }
 
     @Override
@@ -135,40 +136,45 @@ public class TileImageCache implements ITileImageCache {
             mImageLoader = imageLoader;
         }
 
+        public boolean isSameTask(String uri) {
+            return uri.equals(mUri);
+        }
+
         public Bitmap getTile(String uri) {
-            String oldTag = mUri;
-            mUri = uri;
-            if (mUri.equals(oldTag)) {
-                if (mBitmap != null && !mBitmap.isRecycled()) {
-                    return mBitmap;
-                }
-
-                if (mTarget.isLoading) {
-                    return null;
-                }
+            if (isSameTask(uri)) {
+                return mBitmap;
             }
-
-            mBitmap = null;
             return null;
         }
 
         public void requestTile(String uri, ILoaderCallback callback) {
-            mLoaderCallback = null;
             Bitmap bitmap = getTile(uri);
             if (bitmap != null) { // loaded
                 if (callback != null) {
                     callback.onLoaded(bitmap);
                 }
+                mLoaderCallback = null;
                 return;
             }
 
-            mLoaderCallback = callback;
+            if (isSameTask(uri)) {
+                if (mTarget != null && mTarget.isLoading) {
+                    return;
+                }
+            }
 
-            if (mTarget != null) { // cancel last doRequest
+            mUri = uri;
+            mLoaderCallback = callback;
+            mBitmap = null;
+
+            if (mTarget != null) { // cancel last request
                 mTarget.isLoading = false;
                 mImageLoader.cancel(mTarget);
             }
             mTarget = new InnerCallback(this);
+            if (LogUtil.sIsLog) {
+                LogUtil.d(TAG, "request:" + mUri);
+            }
             mImageLoader.request(mUri, mImageLoader.toString(), mTarget);
         }
 

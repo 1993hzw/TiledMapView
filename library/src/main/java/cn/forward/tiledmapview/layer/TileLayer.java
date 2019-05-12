@@ -34,7 +34,7 @@ import cn.forward.tiledmapview.core.ITileLayer;
 import cn.forward.tiledmapview.core.ITiledMapView;
 import cn.forward.tiledmapview.core.Tile;
 import cn.forward.tiledmapview.util.LogUtil;
-import cn.forward.tiledmapview.util.ObjectRecycler;
+import cn.forward.tiledmapview.util.TileObjectRecycler;
 
 public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCache.ILoaderCallback {
 
@@ -43,7 +43,7 @@ public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCa
     private ITiledMapView mTiledMapView;
     private ITileImageCache mTileImageCache = null;
     private RectF mTempRect = new RectF();
-    private ObjectRecycler<OptimizedTile> mTilesRecycler;
+    private TileObjectRecycler<OptimizedTile> mTilesRecycler;
     private int mOffscreenTileLimit = 0;
     private OptimizedTile[] mTiles;
     private Tile mFocusTile;
@@ -81,7 +81,7 @@ public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCa
         mTiledMapView = mapView;
         this.mTileImageCache = tileImageCache;
 
-        mTilesRecycler = new ObjectRecycler<>(new ObjectRecycler.ObjectGenerator<OptimizedTile>() {
+        mTilesRecycler = new TileObjectRecycler<>(new TileObjectRecycler.ObjectGenerator<OptimizedTile>() {
             @Override
             public OptimizedTile generate() {
                 return new OptimizedTile();
@@ -89,9 +89,9 @@ public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCa
         });
     }
 
-    private void resizeRecycler(int rowCount, int colCount) {
-        mTilesRecycler.resize(rowCount, colCount);
-        getTileImageCache().resize(rowCount, colCount);
+    private void resizeRecycler(ITileDisplayInfo tileDisplayInfo, int rowCount, int colCount) {
+        mTilesRecycler.resize(tileDisplayInfo, rowCount, colCount);
+        getTileImageCache().resize(tileDisplayInfo, rowCount, colCount);
     }
 
     @Override
@@ -121,14 +121,14 @@ public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCa
                     titleCount, leftTopRow, leftTopCol, rightBottomRow, rightBottomCol, getOffscreenTileLimit()));
         }
 
-        resizeRecycler(tileRowCount, tileColCount);
+        resizeRecycler(tileDisplayInfo, tileRowCount, tileColCount);
 
         mTiles = new OptimizedTile[titleCount];
 
         int tileId = 0;
         for (int i = leftTopRow; i <= rightBottomRow; i++) {
             for (int j = leftTopCol; j <= rightBottomCol; j++) {
-                mTiles[tileId] = mTilesRecycler.get(i, j);
+                mTiles[tileId] = mTilesRecycler.get(tileDisplayInfo.getLevel(), i, j);
                 mTiles[tileId].reset(tileDisplayInfo.getLevel(), i, j, mTileImageCache.getTileImageSource());
                 tileId++;
             }

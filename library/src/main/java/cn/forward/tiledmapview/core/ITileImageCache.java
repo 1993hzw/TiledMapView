@@ -27,7 +27,7 @@ public interface ITileImageCache {
 
     public Bitmap getPlaceHolder();
 
-    public void resize(int rowCount, int colCount);
+    public void resize(ITileDisplayInfo tileDisplayInfo, int rowCount, int colCount);
 
     public Bitmap getTileBitmap(ITiledMapView mapView, Tile tile);
 

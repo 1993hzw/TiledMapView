@@ -56,7 +56,9 @@ public class PicassoTileImageLoader implements TileImageCache.ITileImageLoader {
 
             @Override
             public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                LogUtil.e(TAG, "onBitmapFailed:" + e.getMessage());
+                if (LogUtil.sIsLog) {
+                    LogUtil.e(TAG, "onBitmapFailed:" + e.getMessage());
+                }
                 sTargets.remove(callback);
                 callback.onFailed(0);
             }

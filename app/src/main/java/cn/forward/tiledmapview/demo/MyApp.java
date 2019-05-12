@@ -7,6 +7,9 @@ import android.content.Context;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
+import cn.forward.tiledmapview.BuildConfig;
+import cn.forward.tiledmapview.TiledMapView;
+
 import static android.content.pm.ApplicationInfo.FLAG_LARGE_HEAP;
 
 public class MyApp extends Application {
@@ -14,6 +17,8 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        TiledMapView.openLog(BuildConfig.DEBUG);
 
         Picasso picasso = new Picasso.Builder(this).memoryCache(
                 new LruCache(calculateMemoryCacheSize(this))).build();
