@@ -81,14 +81,28 @@ public class TileImageCache implements ITileImageCache {
     @Override
     public Bitmap getTileBitmap(ITiledMapView mapView, Tile tile) {
         TileImage tileImage = getTileImage(tile);
-        Bitmap bitmap = tileImage.getTile(mTileImageSource.getUri(tile));
+        String uri = null;
+        if (tile instanceof OptimizedTile) {
+            uri = ((OptimizedTile) tile).getUri();
+        }
+        if (uri == null) {
+            uri = mTileImageSource.getUri(tile);
+        }
+        Bitmap bitmap = tileImage.getTile(uri);
         return bitmap;
     }
 
     @Override
     public void requestTileBitmap(ITiledMapView mapView, Tile tile, ILoaderCallback callback) {
         TileImage tileImage = getTileImage(tile);
-        tileImage.requestTile(mTileImageSource.getUri(tile), callback);
+        String uri = null;
+        if (tile instanceof OptimizedTile) {
+            uri = ((OptimizedTile) tile).getUri();
+        }
+        if (uri == null) {
+            uri = mTileImageSource.getUri(tile);
+        }
+        tileImage.requestTile(uri, callback);
     }
 
     private TileImage getTileImage(Tile tile) {

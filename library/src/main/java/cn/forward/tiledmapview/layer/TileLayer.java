@@ -16,7 +16,6 @@
 
 package cn.forward.tiledmapview.layer;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PointF;
@@ -44,15 +43,15 @@ public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCa
     private ITiledMapView mTiledMapView;
     private ITileImageCache mTileImageCache = null;
     private RectF mTempRect = new RectF();
-    private ObjectRecycler<TileWithDist> mTilesRecycler;
+    private ObjectRecycler<OptimizedTile> mTilesRecycler;
     private int mOffscreenTileLimit = 0;
-    private TileWithDist[] mTiles;
+    private OptimizedTile[] mTiles;
     private Tile mFocusTile;
 
     // Load in the order of divergence with focus as the center
     // 以焦点为中心按发散状顺序加载
-    private Comparator<TileWithDist> mTileComparable = new Comparator<TileWithDist>() {
-        public int compare(TileWithDist tile1, TileWithDist tile2) {
+    private Comparator<OptimizedTile> mTileComparable = new Comparator<OptimizedTile>() {
+        public int compare(OptimizedTile tile1, OptimizedTile tile2) {
             int d1 = tile1.getDistance();
             if (tile1.isNoDistance()) {
                 d1 = (tile1.row - mFocusTile.row) * (tile1.row - mFocusTile.row) + (tile1.col - mFocusTile.col) * (tile1.col - mFocusTile.col);
@@ -82,10 +81,10 @@ public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCa
         mTiledMapView = mapView;
         this.mTileImageCache = tileImageCache;
 
-        mTilesRecycler = new ObjectRecycler<>(new ObjectRecycler.ObjectGenerator<TileWithDist>() {
+        mTilesRecycler = new ObjectRecycler<>(new ObjectRecycler.ObjectGenerator<OptimizedTile>() {
             @Override
-            public TileWithDist generate() {
-                return new TileWithDist();
+            public OptimizedTile generate() {
+                return new OptimizedTile();
             }
         });
     }
@@ -124,13 +123,13 @@ public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCa
 
         resizeRecycler(tileRowCount, tileColCount);
 
-        mTiles = new TileWithDist[titleCount];
+        mTiles = new OptimizedTile[titleCount];
 
         int tileId = 0;
         for (int i = leftTopRow; i <= rightBottomRow; i++) {
             for (int j = leftTopCol; j <= rightBottomCol; j++) {
                 mTiles[tileId] = mTilesRecycler.get(i, j);
-                mTiles[tileId].reset(tileDisplayInfo.getLevel(), i, j);
+                mTiles[tileId].reset(tileDisplayInfo.getLevel(), i, j, mTileImageCache.getTileImageSource());
                 tileId++;
             }
         }
@@ -220,28 +219,6 @@ public class TileLayer extends AbstractLayer implements ITileLayer, ITileImageCa
     @Override
     public void onFailed(int reason) {
 
-    }
-
-    private static class TileWithDist extends Tile {
-        private int mDistance = Integer.MAX_VALUE;
-
-        public void setDistance(int distance) {
-            mDistance = distance;
-        }
-
-        public int getDistance() {
-            return mDistance;
-        }
-
-        @Override
-        public void reset(int level, int row, int col) {
-            super.reset(level, row, col);
-            mDistance = Integer.MAX_VALUE;
-        }
-
-        public boolean isNoDistance() {
-            return mDistance == Integer.MAX_VALUE;
-        }
     }
 }
 
