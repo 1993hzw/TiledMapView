@@ -126,11 +126,3 @@ Q&A <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=9cef40e0b665e257453
     See the License for the specific language governing permissions and
     limitations under the License.
 ```
-
-# Donations 打赏
-
-If this project helps you a lot and you want to support the project's development and maintenance of this project, feel free to scan the following QR code for donation. Your donation is highly appreciated. Thank you!
-
-***如果这个项目对您有很大帮助，并且您想支持该项目的项目开发和维护，请扫描以下二维码进行捐赠。非常感谢您的支持！***
-
-![donate](https://raw.githubusercontent.com/1993hzw/common/master/payment.png)
